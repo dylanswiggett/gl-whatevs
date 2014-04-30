@@ -18,7 +18,7 @@ class GLHandler {
   void add_model(std::string name, Model *model);
  private:
   int width_, height_;
-  std::map<std::string,Model *> models_;
+  std::map<std::string,Model *> *models_;
 };
 
 #endif  // _GL_HANDLER_HPP_

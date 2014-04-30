@@ -6,10 +6,10 @@
 
 class Model {
  public:
-  Model(GLfloat *vertex_buffer_data, int num_vertices);
+  Model(const GLfloat *vertex_buffer_data, int num_vertices);
   ~Model();
  private:
-  float *vertex_buffer_data_;
+  const GLfloat * const vertex_buffer_data_;
   int num_vertices_;
   GLuint vertex_array_id_;
 };

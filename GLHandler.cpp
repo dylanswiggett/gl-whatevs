@@ -12,14 +12,16 @@ GLHandler::GLHandler(int width, int height) :
   width_(width), height_(height)
 {
   glClearColor(1, 0, 0, 1);
+  models_ = new map<string,Model *>();
 }
 
 GLHandler::~GLHandler() {
   /* TODO: delete all models */
+  delete models_;
 }
 
 void GLHandler::add_model(std::string name, Model *model) {
-  models_.insert(pair<string,Model *>(name, model));
+  models_->insert(pair<string,Model *>(name, model));
 }
 
 void GLHandler::update_screen() {

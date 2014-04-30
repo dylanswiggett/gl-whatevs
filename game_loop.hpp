@@ -1,12 +1,12 @@
 #ifndef _GAME_LOOP_HPP_
 #define _GAME_LOOP_HPP_
 
-#include "SDL/SDL.h"
+#include "SDL2/SDL.h"
 #include "GLHandler.hpp"
 
 class GameLoop {
  public:
-  GameLoop(SDL_Surface *surface);
+  GameLoop(SDL_Window *window);
   ~GameLoop();
 
   int run_game_loop();
@@ -14,6 +14,7 @@ class GameLoop {
   void hacky_setup();
   bool game_running_;
   GLHandler *gl_handler_;
+  SDL_Window *window_;
 };
 
 #endif  // _GAME_LOOP_HPP_

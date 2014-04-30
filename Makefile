@@ -1,5 +1,5 @@
 CXX = g++
-LINKERS = -lSDL -lGLEW -lGL
+LINKERS = -lSDL2 -lGLEW -lGL
 FLAGS = -Wall -g -std=c++11
 
 main: main.o game_loop.o GLHandler.o Model.o
