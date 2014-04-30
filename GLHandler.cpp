@@ -15,7 +15,7 @@ GLHandler::GLHandler(int width, int height) :
 }
 
 GLHandler::~GLHandler() {
-  
+  /* TODO: delete all models */
 }
 
 void GLHandler::add_model(std::string name, Model *model) {
