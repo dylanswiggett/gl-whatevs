@@ -16,7 +16,10 @@ GLHandler::GLHandler(int width, int height) :
 }
 
 GLHandler::~GLHandler() {
-  /* TODO: delete all models */
+  std::map<string,Model *>::iterator it;
+  for (it = models_->begin(); it != models_->end(); ++it) {
+    delete it->second;
+  }
   delete models_;
 }
 

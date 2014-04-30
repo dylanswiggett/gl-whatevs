@@ -13,4 +13,5 @@ Model::Model(const GLfloat *vertex_buffer_data, int num_vertices) :
 
 Model::~Model() {
   /* TODO: Free vertex information, and remove from OpenGL */
+  delete vertex_buffer_data_;
 }
