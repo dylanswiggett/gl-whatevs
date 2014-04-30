@@ -14,8 +14,10 @@ class GLHandler {
   GLHandler(int width, int height);
   ~GLHandler();
 
+  void clear_screen();
   void update_screen();
   void add_model(std::string name, Model *model);
+  void draw_model(std::string name);
  private:
   int width_, height_;
   std::map<std::string,Model *> *models_;

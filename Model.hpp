@@ -8,10 +8,12 @@ class Model {
  public:
   Model(const GLfloat *vertex_buffer_data, int num_vertices);
   ~Model();
+
+  void draw();
  private:
   const GLfloat * const vertex_buffer_data_;
   int num_vertices_;
-  GLuint vertex_array_id_;
+  GLuint vertex_array_id_, vertex_buffer_;
 };
 
 #endif  // _MODEL_HPP_

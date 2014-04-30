@@ -27,6 +27,14 @@ void GLHandler::add_model(std::string name, Model *model) {
   models_->insert(pair<string,Model *>(name, model));
 }
 
-void GLHandler::update_screen() {
+void GLHandler::draw_model(std::string name) {
+  Model *model = models_->find(name)->second;
+  model->draw();
+}
+
+void GLHandler::clear_screen() {
   glClear(CLEAR_FLAGS);
+}
+
+void GLHandler::update_screen() {
 }
