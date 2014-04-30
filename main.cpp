@@ -1,8 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "SDL2/SDL.h"
-// #include "SDL/SDL_opengl.h"
-
+#include "GL/glew.h"
 #include "game_loop.hpp"
 
 #define SDL_FLAGS SDL_INIT_EVERYTHING
@@ -13,7 +12,6 @@
 using namespace std;
 
 SDL_Window *init_SDL() {
-  // const SDL_VideoInfo *vidInfo;
   int res;
   SDL_Window *window;
 
@@ -25,27 +23,6 @@ SDL_Window *init_SDL() {
     "GL Whatnot", 0, 0, SDL_WIDTH, SDL_HEIGHT,
     SDL_OGL_FLAGS);
 
-  // vidInfo = SDL_GetVideoInfo();
-  // if (vidInfo == NULL)
-  //   return NULL;
-
-  // res = 0;
-  // res |= SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-  // res |= SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-  // res |= SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-  // res |= SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-  // res |= SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-  // res |= SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-  // if (res != 0)
-  //   return NULL;
-
-  // window = SDL_SetVideoMode(SDL_WIDTH, SDL_HEIGHT,
-  //                            vidInfo->vfmt->BitsPerPixel,
-  //                            SDL_OGL_FLAGS);
-
-  // if (window == NULL)
-  //   return NULL;
-
   // SUCCESS
   return window;
 }
@@ -55,7 +32,15 @@ void destroy_SDL() {
 }
 
 SDL_GLContext init_GL(SDL_Window *window) {
-  return SDL_GL_CreateContext(window);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+
+  SDL_GLContext context = SDL_GL_CreateContext(window);
+
+  glewExperimental = GL_TRUE;
+  glewInit();
+
+  return context;
 }
 
 void destroy_GL(SDL_GLContext context) {
@@ -81,6 +66,8 @@ int runGame() {
     destroy_SDL();
     return -1;
   }
+
+  cout << "Running with OpenGL version " << glGetString(GL_VERSION) << endl;
 
   try {
 
