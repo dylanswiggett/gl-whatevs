@@ -2,15 +2,15 @@ CXX = g++
 LINKERS = -lSDL2 -lGLEW -lGL
 FLAGS = -Wall -g -std=c++11
 
-main: main.o game_loop.o GLHandler.o Model.o
-	$(CXX) $(FLAGS) -o main main.o game_loop.o GLHandler.o \
+main: main.o GameLoop.o GLHandler.o Model.o
+	$(CXX) $(FLAGS) -o main main.o GameLoop.o GLHandler.o \
 	                        Model.o $(LINKERS)
 
-main.o: main.cpp game_loop.hpp GLHandler.hpp
+main.o: main.cpp GameLoop.hpp GLHandler.hpp
 	$(CXX) $(FLAGS) -c -o main.o main.cpp
 
-game_loop.o: game_loop.cpp game_loop.hpp GLHandler.hpp
-	$(CXX) $(FLAGS) -c -o game_loop.o game_loop.cpp
+GameLoop.o: GameLoop.cpp GameLoop.hpp GLHandler.hpp
+	$(CXX) $(FLAGS) -c -o GameLoop.o GameLoop.cpp
 
 GLHandler.o: GLHandler.cpp GLHandler.hpp Model.o
 	$(CXX) $(FLAGS) -c -o GLHandler.o GLHandler.cpp

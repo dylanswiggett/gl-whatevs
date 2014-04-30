@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include "SDL2/SDL.h"
 #include "GL/glew.h"
-#include "game_loop.hpp"
+#include "GameLoop.hpp"
 
 #define SDL_FLAGS SDL_INIT_EVERYTHING
 #define SDL_OGL_FLAGS SDL_WINDOW_OPENGL
