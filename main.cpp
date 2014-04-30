@@ -2,6 +2,8 @@
 #include <cstdlib>
 #include "SDL/SDL.h"
 
+#include "game_loop.hpp"
+
 #define SDL_FLAGS SDL_INIT_EVERYTHING
 #define SDL_OGL_FLAGS SDL_OPENGL
 #define SDL_WIDTH 1000
@@ -37,17 +39,11 @@ void destroy_SDL() {
   SDL_Quit();
 }
 
-bool init_OGL() {
-  throw "init_OGL not implemented.";
-}
-
-void destroy_OGL() {
-  throw "destroy_OGL not implemented.";
-}
-
 int runGame() {
+  int res;
   char const* err_msg = NULL;
   SDL_Surface *surface;
+  GameLoop *gameloop;
 
   // Setup
 
@@ -56,15 +52,16 @@ int runGame() {
     return -1;
   }
 
-  if (!init_OGL()) {
-    destroy_SDL();
-    cout << "Failed to initialize OpenGL. Exiting." << endl;
-    return -1;
-  }
-
   try {
 
-    /* Everything */
+    gameloop = new GameLoop(surface);
+
+    res = gameloop->run_game_loop();
+
+    if (res < 0)
+      cout << "Game exiting with failure." << endl;
+
+    delete gameloop;
 
   } catch (char const *msg) {
     err_msg = msg;
@@ -72,7 +69,6 @@ int runGame() {
 
   // Cleanup
 
-  destroy_OGL();
   destroy_SDL();
 
   if (err_msg != NULL)
