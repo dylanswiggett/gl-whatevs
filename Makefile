@@ -9,7 +9,7 @@ main: main.o GameLoop.o GLHandler.o Model.o shader_loader.o
 main.o: main.cpp GameLoop.hpp GLHandler.hpp
 	$(CXX) $(FLAGS) -c -o main.o main.cpp
 
-GameLoop.o: GameLoop.cpp GameLoop.hpp GLHandler.hpp
+GameLoop.o: GameLoop.cpp GameLoop.hpp GLHandler.hpp shader_loader.hpp
 	$(CXX) $(FLAGS) -c -o GameLoop.o GameLoop.cpp
 
 GLHandler.o: GLHandler.cpp GLHandler.hpp Model.hpp shader_loader.hpp

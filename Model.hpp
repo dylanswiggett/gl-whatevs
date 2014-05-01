@@ -10,10 +10,13 @@ class Model {
   ~Model();
 
   void draw();
+
+  void set_program(GLuint program_id);
  private:
   const GLfloat * const vertex_buffer_data_;
   int num_vertices_;
   GLuint vertex_array_id_, vertex_buffer_;
+  GLuint *program_id_;
 };
 
 #endif  // _MODEL_HPP_

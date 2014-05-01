@@ -1,6 +1,7 @@
 #include "GameLoop.hpp"
 #include <iostream>
 #include "SDL2/SDL.h"
+#include "shader_loader.hpp"
 
 GameLoop::GameLoop(SDL_Window *window) :
   game_running_(true), window_(window)
@@ -21,7 +22,11 @@ void GameLoop::hacky_setup() {
   vertices[3] =  1.0f; vertices[4] = -1.0f; vertices[5] = 0.0f;
   vertices[6] =  0.0f; vertices[7] =  1.0f; vertices[8] = 0.0f;
 
-  gl_handler_->add_model("triangle", new Model(vertices, 3));
+  Model *triangleModel = new Model(vertices, 3);
+  triangleModel->set_program(LoadShaders(
+    "shaders/shader.vert", "shaders/shader.frag"));
+
+  gl_handler_->add_model("triangle", triangleModel);
 }
 
 int GameLoop::run_game_loop() {
