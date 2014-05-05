@@ -1,10 +1,15 @@
 #include "GameState.hpp"
 #include <map>
+#include "glm/glm.hpp"
 
 GameState::GameState(GLHandler *gl_handler) {
   model_instances_ = new std::map<int,ModelInstance *>();
-  current_camera_ = new Camera(90, .01, 100,
-    ((double) gl_handler->get_width()) / gl_handler->get_height());
+  // current_camera_ = new Camera(90, .01, 100,
+  //   ((double) gl_handler->get_width()) / gl_handler->get_height());
+  current_camera_ = cameraTowards(
+    glm::vec3(0, 0, -10), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0),
+    90, .01, 100,
+    ((double) gl_handler->get_width()) / ((double) gl_handler->get_height()));
 
   gl_handler_ = gl_handler;
 

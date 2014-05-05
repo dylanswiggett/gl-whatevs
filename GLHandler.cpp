@@ -11,7 +11,7 @@ using namespace std;
 GLHandler::GLHandler(int width, int height) :
   width_(width), height_(height)
 {
-  glClearColor(1, 0, 0, 1);
+  glClearColor(0, 0, .2f, 1);
   models_ = new map<int,Model *>();
   model_ids_ = new map<string,int>();
   shaders_ = new map<int,Shader *>();

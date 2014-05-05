@@ -9,8 +9,8 @@ class Camera {
   Camera(glm::vec3 pos, glm::vec3 dir, glm::vec3 up, double FOV,
          double nearPlane, double farPlane, double aspectRatio);
 
-  glm::mat4 getCamMatrix();
-  glm::mat4 getProjMatrix();
+  const glm::mat4 getCamMatrix() const;
+  const glm::mat4 getProjMatrix() const;
  private:
   void build_mat();
 

@@ -2,6 +2,9 @@
 #include <iostream>
 #include "SDL2/SDL.h"
 #include "shader_loader.hpp"
+#include "glm/glm.hpp"
+
+#define FPS 60
 
 GameLoop::GameLoop(SDL_Window *window) :
   game_running_(true), window_(window)
@@ -17,6 +20,9 @@ GameLoop::~GameLoop() {
   delete gl_handler_;
 }
 
+/*
+ * TODO: Make a better setup procedure!
+ */
 void GameLoop::hacky_setup() {
   GLfloat *vertices = new GLfloat[9];
 
@@ -35,15 +41,31 @@ void GameLoop::hacky_setup() {
     gl_handler_->get_model_id("triangle"),
     gl_handler_->get_shader_id("test"));
 
+  instance->setPosition(glm::vec3(0, .5, 0));
+  instance->setRotation(glm::vec3(0, 1, 0), .5);
+
+  game_state_->add_model_instance(instance);
+
+  instance = new ModelInstance(
+    gl_handler_->get_model_id("triangle"),
+    gl_handler_->get_shader_id("test"));
+
+  instance->setPosition(glm::vec3(0, -3, 0));
+  instance->setRotation(glm::vec3(0, 1, 0), 2);
+  instance->setScale(glm::vec3(2, 2, 3));
+
   game_state_->add_model_instance(instance);
 }
 
 int GameLoop::run_game_loop() {
   SDL_Event event;
 
-  hacky_setup();
+  hacky_setup(); // :(
 
   while (game_running_) {
+    /*
+     * TODO: Move controls to separate, observer based system.
+     */
     while (SDL_PollEvent(&event)) {
       switch (event.type) {
         case SDL_QUIT:
@@ -58,6 +80,7 @@ int GameLoop::run_game_loop() {
     game_state_->draw();
 
     SDL_GL_SwapWindow(window_);
+    SDL_Delay(1000.0f / FPS);
   }
   return 0;
 }
