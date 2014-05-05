@@ -10,7 +10,7 @@ class Camera {
 
   glm::mat4 getMatrix();
  private:
-  glm::vec3 pos, dir;
+  glm::vec3 pos_, dir_;
   double FOV;
 };
 

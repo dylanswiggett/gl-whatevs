@@ -10,16 +10,15 @@
 
 Shader::Shader(std::string vertexPath, std::string fragPath) {
   program_id_ = LoadShaders(
-    "shaders/shader.vert", "shaders/shader.frag")
+    "shaders/shader.vert", "shaders/shader.frag");
 }
 
 Shader::~Shader() {
-  delete program_id_;
 }
 
 void Shader::draw(const Model *model, const ModelInstance *model_instance,
                   const Camera *camera) {
-  glUseProgram(*program_id_);
+  glUseProgram(program_id_);
 
   // TODO: Use camera
 
