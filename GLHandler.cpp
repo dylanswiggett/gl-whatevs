@@ -14,36 +14,55 @@ GLHandler::GLHandler(int width, int height) :
   glClearColor(1, 0, 0, 1);
   models_ = new map<int,Model *>();
   model_ids_ = new map<string,int>();
-  id_incr = 1;
+  shaders_ = new map<int,Shader *>();
+  shader_ids_ = new map<string,int>();
+  id_incr_ = 1;
 }
 
 GLHandler::~GLHandler() {
-  std::map<int,Model *>::iterator it;
-  for (it = models_->begin(); it != models_->end(); ++it) {
-    delete it->second;
+  std::map<int,Model *>::iterator modelIt;
+  for (modelIt = models_->begin(); modelIt != models_->end(); ++modelIt) {
+    delete modelIt->second;
   }
   delete models_;
   delete model_ids_;
+
+  std::map<int,Shader *>::iterator shaderIt;
+  for (shaderIt = shaders_->begin(); shaderIt != shaders_->end(); ++shaderIt) {
+    delete shaderIt->second;
+  }
+  delete shaders_;
+  delete shader_ids_;
 }
 
-int GLHandler::add_model(std::string name, Model *model) {
-  model_ids_->insert(pair<string,int>(name, id_incr));
-  models_->insert(pair<int,Model *>(id_incr, model));
-  id_incr++;
-  return id_incr - 1;
+int GLHandler::add_model(const std::string name, Model *model) {
+  model_ids_->insert(pair<string,int>(name, id_incr_));
+  models_->insert(pair<int,Model *>(id_incr_, model));
+  id_incr_++;
+  return id_incr_ - 1;
 }
 
-int GLHandler::get_model_id(std::string name) {
+int GLHandler::get_model_id(const std::string name) const {
   return model_ids_->find(name)->second;
 }
 
-void GLHandler::draw_model(int id) {
-  Model *model = models_->find(id)->second;
-  model->draw();
+Model *GLHandler::get_model(const int id) const {
+  return models_->find(id)->second;
 }
 
-void GLHandler::draw_model(string name) {
-  draw_model(get_model_id(name));
+int GLHandler::add_shader(const std::string name, Shader *shader) {
+  shader_ids_->insert(pair<string,int>(name, id_incr_));
+  shaders_->insert(pair<int,Shader *>(id_incr_, shader));
+  id_incr_++;
+  return id_incr_ - 1;
+}
+
+int GLHandler::get_shader_id(const std::string name) const {
+  return shader_ids_->find(name)->second;
+}
+
+Shader *GLHandler::get_shader(const int id) const {
+  return shaders_->find(id)->second;
 }
 
 void GLHandler::clear_screen() {

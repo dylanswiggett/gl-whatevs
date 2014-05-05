@@ -17,19 +17,26 @@ GameLoop::~GameLoop() {
   delete gl_handler_;
 }
 
-// void GameLoop::hacky_setup() {
-//   GLfloat *vertices = new GLfloat[9];
+void GameLoop::hacky_setup() {
+  GLfloat *vertices = new GLfloat[9];
 
-//   vertices[0] = -1.0f; vertices[1] = -1.0f; vertices[2] = 0.0f;
-//   vertices[3] =  1.0f; vertices[4] = -1.0f; vertices[5] = 0.0f;
-//   vertices[6] =  0.0f; vertices[7] =  1.0f; vertices[8] = 0.0f;
+  vertices[0] = -1.0f; vertices[1] = -1.0f; vertices[2] = 0.0f;
+  vertices[3] =  1.0f; vertices[4] = -1.0f; vertices[5] = 0.0f;
+  vertices[6] =  0.0f; vertices[7] =  1.0f; vertices[8] = 0.0f;
 
-//   Model *triangleModel = new Model(vertices, 3);
-//   triangleModel->set_program(LoadShaders(
-//     "shaders/shader.vert", "shaders/shader.frag"));
+  Model *triangleModel = new Model(vertices, 3);
 
-//   gl_handler_->add_model("triangle", triangleModel);
-// }
+  Shader *testShader = new Shader("shaders/shader.vert", "shaders/shader.frag");
+
+  gl_handler_->add_model("triangle", triangleModel);
+  gl_handler_->add_shader("test", testShader);
+
+  ModelInstance *instance = new ModelInstance(
+    gl_handler_->get_model_id("triangle"),
+    gl_handler_->get_shader_id("test"));
+
+  game_state_->add_model_instance(instance);
+}
 
 int GameLoop::run_game_loop() {
   SDL_Event event;

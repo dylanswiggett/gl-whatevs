@@ -2,7 +2,8 @@ CXX = g++
 LINKERS = -lSDL2 -lGLEW -lGL
 FLAGS = -Wall -g -std=c++11
 
-main: main.o GameLoop.o GLHandler.o Model.o shader_loader.o
+main: main.o GameLoop.o GLHandler.o Model.o shader_loader.o \
+	  ModelInstance.o Shader.o Camera.o GameState.o
 	$(CXX) $(FLAGS) -o main main.o GameLoop.o GLHandler.o \
 	                        Model.o shader_loader.o ModelInstance.o \
 	                        Shader.o Camera.o GameState.o $(LINKERS)
@@ -21,16 +22,16 @@ Model.o: Model.cpp Model.hpp
 	$(CXX) $(FLAGS) -c -o Model.o Model.cpp
 
 ModelInstance.o: ModelInstance.cpp ModelInstance.hpp
-	$(CXX) $(FLAGS) -c -o ModelInstance.o ModelInstance.hpp
+	$(CXX) $(FLAGS) -c -o ModelInstance.o ModelInstance.cpp
 
 Shader.o: Shader.cpp Shader.hpp shader_loader.hpp
-	$(CXX) $(FLAGS) -c -o Shader.o Shader.hpp
+	$(CXX) $(FLAGS) -c -o Shader.o Shader.cpp
 
 Camera.o: Camera.cpp Camera.hpp
-	$(CXX) $(FLAGS) -c -o Camera.o Camera.hpp
+	$(CXX) $(FLAGS) -c -o Camera.o Camera.cpp
 
 GameState.o: GameState.cpp GameState.hpp
-	$(CXX) $(FLAGS) -c -o GameState.o GameState.hpp
+	$(CXX) $(FLAGS) -c -o GameState.o GameState.cpp
 
 shader_loader.o: shader_loader.cpp shader_loader.hpp
 	$(CXX) $(FLAGS) -c -o shader_loader.o shader_loader.cpp

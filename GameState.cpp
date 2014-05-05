@@ -42,6 +42,6 @@ void GameState::draw() {
   std::map<int,ModelInstance *>::iterator it;
   for (it = models_->begin(); it != models_->end(); ++it) {
     gl_handler_->get_shader(it->second->get_shader_id())
-               ->draw(it->second->get_model_id(), current_camera_)
+               ->draw(it->second->get_model_id(), it->second, current_camera_);
   }
 }
