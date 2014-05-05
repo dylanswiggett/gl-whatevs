@@ -12,6 +12,7 @@ class Model {
   void draw();
 
   void set_program(GLuint program_id);
+  GLuint get_program();
  private:
   const GLfloat * const vertex_buffer_data_;
   int num_vertices_;

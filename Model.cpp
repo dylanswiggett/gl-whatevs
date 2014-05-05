@@ -37,10 +37,19 @@ void Model::draw() {
   glDrawArrays(GL_TRIANGLES, 0, 3);
 
   glDisableVertexAttribArray(0);
+
+  glUseProgram(0);
 }
 
 void Model::set_program(GLuint program_id) {
   if (program_id_ == nullptr)
     program_id_ = new GLuint;
   *program_id_ = program_id;
+}
+
+GLuint Model::get_program() {
+  if (program_id_ == nullptr)
+    return 0;
+  else
+    return *program_id_;
 }
