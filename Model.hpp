@@ -8,6 +8,9 @@ class Model {
  public:
   Model(const GLfloat *vertex_buffer_data, const int num_vertices);
   ~Model();
+
+  const int get_vertex_buffer_id() const;
+  const int get_num_vertices() const;
  private:
   const GLfloat * const vertex_buffer_data_;
   int num_vertices_;

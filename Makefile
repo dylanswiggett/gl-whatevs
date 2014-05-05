@@ -23,7 +23,7 @@ Model.o: Model.cpp Model.hpp
 ModelInstance.o: ModelInstance.cpp ModelInstance.hpp
 	$(CXX) $(FLAGS) -c -o ModelInstance.o ModelInstance.hpp
 
-Shader.o: Shader.cpp Shader.hpp
+Shader.o: Shader.cpp Shader.hpp shader_loader.hpp
 	$(CXX) $(FLAGS) -c -o Shader.o Shader.hpp
 
 Camera.o: Camera.cpp Camera.hpp

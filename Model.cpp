@@ -22,34 +22,12 @@ Model::~Model() {
   /* TODO: Free vertex information, and remove from OpenGL */
   glDeleteVertexArrays(1, &vertex_array_id_);
   delete vertex_buffer_data_;
-  if (program_id_ != nullptr)
-    delete program_id_;
 }
 
-void Model::draw() {
-  if (program_id_ != nullptr)
-    glUseProgram(*program_id_);
-
-  glEnableVertexAttribArray(0);
-  glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
-  glVertexAttribPointer(0, num_vertices_, GL_FLOAT, GL_FALSE, 0, (void *)0);
-
-  glDrawArrays(GL_TRIANGLES, 0, 3);
-
-  glDisableVertexAttribArray(0);
-
-  glUseProgram(0);
+const int Model::get_vertex_buffer_id() const {
+  return vertex_buffer_;
 }
 
-void Model::set_program(GLuint program_id) {
-  if (program_id_ == nullptr)
-    program_id_ = new GLuint;
-  *program_id_ = program_id;
-}
-
-GLuint Model::get_program() {
-  if (program_id_ == nullptr)
-    return 0;
-  else
-    return *program_id_;
+const int Model::get_num_vertices() const {
+  return num_vertices_;
 }
