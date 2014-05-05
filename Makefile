@@ -22,6 +22,15 @@ Model.o: Model.cpp Model.hpp
 ModelInstance.o: ModelInstance.cpp ModelInstance.hpp
 	$(CXX) $(FLAGS) -c -o ModelInstance.o ModelInstance.hpp
 
+Shader.o: Shader.cpp Shader.hpp
+	$(CXX) $(FLAGS) -c -o Shader.o Shader.hpp
+
+Camera.o: Camera.cpp Camera.hpp
+	$(CXX) $(FLAGS) -c -o Camera.o Camera.hpp
+
+GameState.o: GameState.cpp GameState.hpp
+	$(CXX) $(FLAGS) -c -o GameState.o GameState.hpp
+
 shader_loader.o: shader_loader.cpp shader_loader.hpp
 	$(CXX) $(FLAGS) -c -o shader_loader.o shader_loader.cpp
 

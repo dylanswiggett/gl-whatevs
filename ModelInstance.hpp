@@ -1,5 +1,5 @@
-#ifndef MODEL_INSTANCE_HPP_
-#define MODEL_INSTANCE_HPP_
+#ifndef _MODEL_INSTANCE_HPP_
+#define _MODEL_INSTANCE_HPP_
 
 #include "GL/glm.h"
 #include <string>
@@ -13,4 +13,4 @@ class ModelInstance {
   int modelId;
 };
 
-#endif  // MODEL_INSTANCE_HPP_
+#endif  // _MODEL_INSTANCE_HPP_

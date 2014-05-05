@@ -16,10 +16,12 @@ class GLHandler {
 
   void clear_screen();
   void update_screen();
-  int add_model(std::string name, Model *model);
-  int get_model_id(std::string name);
-  void draw_model(std::string modelName, std::string shaderName);
-  void draw_model(int modelId, int shaderId);
+  int add_model(const std::string name, const Model *model);
+  int get_model_id(const std::string name) const;
+  Model *get_model(const int id) const;
+  int add_shader(const std::string name, const Shader *shader);
+  int get_shader_id(const std::string name) const;
+  Shader *get_shader(const int id) const;
  private:
   int id_incr_;
 
