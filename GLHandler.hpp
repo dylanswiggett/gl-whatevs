@@ -23,6 +23,9 @@ class GLHandler {
   int add_shader(const std::string name, Shader *shader);
   int get_shader_id(const std::string name) const;
   Shader *get_shader(const int id) const;
+
+  int get_width() const;
+  int get_height() const;
  private:
   int id_incr_;
 

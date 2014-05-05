@@ -3,7 +3,8 @@
 
 GameState::GameState(GLHandler *gl_handler) {
   model_instances_ = new std::map<int,ModelInstance *>();
-  current_camera_ = new Camera();
+  current_camera_ = new Camera(90, .01, 100,
+    ((double) gl_handler->get_width()) / gl_handler->get_height());
 
   gl_handler_ = gl_handler;
 

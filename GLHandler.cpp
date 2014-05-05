@@ -71,3 +71,11 @@ void GLHandler::clear_screen() {
 
 void GLHandler::update_screen() {
 }
+
+int GLHandler::get_width() const {
+  return width_;
+}
+
+int GLHandler::get_height() const {
+  return height_;
+}
