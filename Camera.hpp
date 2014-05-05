@@ -5,6 +5,9 @@
 
 class Camera {
  public:
+  Camera();
+  ~Camera();
+  
   glm::mat4 getMatrix();
  private:
   glm::vec3 pos, dir;

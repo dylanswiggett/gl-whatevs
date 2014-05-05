@@ -15,6 +15,7 @@ class GameLoop {
   bool game_running_;
   GLHandler *gl_handler_;
   SDL_Window *window_;
+  GameState *game_state_;
 };
 
 #endif  // _GAME_LOOP_HPP_
