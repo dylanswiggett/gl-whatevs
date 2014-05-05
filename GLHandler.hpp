@@ -2,6 +2,7 @@
 #define _GL_HANDLER_HPP_
 
 #include "Model.hpp"
+#include "Shader.hpp"
 #include <map>
 #include <string>
 

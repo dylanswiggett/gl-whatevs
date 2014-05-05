@@ -3,6 +3,7 @@
 
 #include "SDL2/SDL.h"
 #include "GLHandler.hpp"
+#include "GameState.hpp"
 
 class GameLoop {
  public:

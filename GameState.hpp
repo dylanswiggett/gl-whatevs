@@ -3,10 +3,14 @@
 
 #include <map>
 #include "GLHandler.hpp"
+#include "Camera.hpp"
+#include "ModelInstance.hpp"
 
 class GameState {
  public:
   GameState(GLHandler *gl_handler);
+
+  // Note: This does NOT free gl_handler_. The client must do this.
   ~GameState();
 
   void set_camera(Camera *newCamera);
@@ -17,7 +21,7 @@ class GameState {
   void step();
   void draw();
  private:
-  map<int,ModelInstance *> *model_instances_;
+  std::map<int,ModelInstance *> *model_instances_;
   Camera *current_camera_;
   GLHandler *gl_handler_;
   int id_incr_;
