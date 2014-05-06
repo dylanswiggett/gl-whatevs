@@ -7,6 +7,7 @@
 #include "shader_loader.hpp"
 #include <string>
 #include "GL/gl.h"
+#include <iostream>
 
 #define MODEL_MATRIX_NAME "modelMat"
 #define CAMERA_MATRIX_NAME "cameraMat"
@@ -32,14 +33,13 @@ void Shader::draw(const Model *model, const ModelInstance *model_instance,
   glUniformMatrix4fv(cameraMatId, 1, GL_FALSE, &(camera->getCamMatrix())[0][0]);
   glUniformMatrix4fv(projectionMatId, 1, GL_FALSE, &(camera->getProjMatrix())[0][0]);
 
-  glEnableVertexAttribArray(0);
-  glBindBuffer(GL_ARRAY_BUFFER, model->get_vertex_buffer_id());
-  glVertexAttribPointer(0, model->get_num_vertices(), 
-                        GL_FLOAT, GL_FALSE, 0, (void *)0);
+  model->bind_gl_data();
 
-  glDrawArrays(GL_TRIANGLES, 0, 3);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->get_element_buffer_id());
+  glDrawElements(GL_TRIANGLES, model->get_num_vertices(), GL_UNSIGNED_INT, (void*)0);
+  std::cout << "Drew element buffer " << model->get_element_buffer_id() << ", with " << model->get_num_vertices() << " vertices." << std::endl;
 
-  glDisableVertexAttribArray(0);
+  model->unbind_gl_data();
 
   glUseProgram(0);
 }

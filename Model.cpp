@@ -98,6 +98,8 @@ Model::Model(std::string filepath) :
   }
 
   f.close();
+
+  build_vbo();
 }
 
 Model::~Model() {
@@ -106,8 +108,20 @@ Model::~Model() {
   delete faces_;
 }
 
-const int Model::get_vertex_buffer_id() const {
-  return vertex_buffer_;
+const GLuint Model::get_element_buffer_id() const {
+  return element_buffer_id_;
+}
+
+void Model::bind_gl_data() const {
+  glBindVertexArray(vertex_array_id_);
+  glEnableVertexAttribArray(0);
+  glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
+  glVertexAttribPointer(0, 3, 
+                        GL_FLOAT, GL_FALSE, 0, (void *)0);
+}
+
+void Model::unbind_gl_data() const {
+  glDisableVertexAttribArray(0);
 }
 
 const int Model::get_num_vertices() const {

@@ -38,7 +38,7 @@ void GameLoop::hacky_setup() {
   instance->setPosition(glm::vec3(0, .5, 0));
   instance->setRotation(glm::vec3(0, 1, 0), .5);
 
-  game_state_->add_model_instance(instance);
+  // game_state_->add_model_instance(instance);
 
   instance = new ModelInstance(
     gl_handler_->get_model_id("triangle"),
