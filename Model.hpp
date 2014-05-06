@@ -10,21 +10,24 @@
 
 class Vertex {
  public:
+  // We need this for maps when building our VBO.
   bool operator<(const Vertex &v) const {
-    if (pos.x != v.pos.x)
-      return pos.x < v.pos.x;
+    if      (pos.x != v.pos.x)
+      return pos.x <  v.pos.x;
     else if (pos.y != v.pos.y)
-      return pos.y < v.pos.y;
+      return pos.y <  v.pos.y;
     else if (pos.z != v.pos.z)
-      return pos.z < v.pos.z;
+      return pos.z <  v.pos.z;
+
     else if (norm.x != v.norm.x)
-      return norm.x < v.norm.x;
+      return norm.x <  v.norm.x;
     else if (norm.y != v.norm.y)
-      return norm.y < v.norm.y;
+      return norm.y <  v.norm.y;
     else if (norm.z != v.norm.z)
-      return norm.z < v.norm.z;
+      return norm.z <  v.norm.z;
+
     else if (tex.x != v.tex.x)
-      return tex.x < v.tex.x;
+      return tex.x <  v.tex.x;
     else
       return tex.y < v.tex.y;
   }
@@ -47,14 +50,18 @@ class Model {
   const int get_num_vertices() const;
  private:
   uint get_vertex_id(const Vertex &v);
+  void build_vbo();
 
   std::map<Vertex,int> *vertices_;
   std::vector<Polygon> *faces_;
 
-  const GLfloat * const vertex_buffer_data_;
-  int num_vertices_;
-  GLuint vertex_array_id_, vertex_buffer_;
-  int id_incr_;
+  int max_vbo_id_;
+  GLuint vertex_array_id_;
+
+  GLuint vertex_buffer_;
+  GLuint normal_buffer_;
+  GLuint texcoord_buffer_;
+  GLuint element_buffer_id_;
 };
 
 #endif  // _MODEL_HPP_

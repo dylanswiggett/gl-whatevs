@@ -16,8 +16,7 @@ using namespace std;
 using namespace glm;
 
 Model::Model(std::string filepath) :
-  vertex_buffer_data_(nullptr),
-  id_incr_(1)
+  max_vbo_id_(0)
 {
   fstream f;
   char line[MAX_FILE_LINE_LENGTH];
@@ -48,6 +47,8 @@ Model::Model(std::string filepath) :
 
     if (terms.size() == 0)
       continue;
+
+    // Process lines from an OBJ (blender) file.
 
     if (terms[0] == "v") {
       positions.push_back(
@@ -100,8 +101,7 @@ Model::Model(std::string filepath) :
 }
 
 Model::~Model() {
-  glDeleteVertexArrays(1, &vertex_array_id_);
-  delete vertex_buffer_data_;
+  // TODO: Free all opengl allocations
   delete vertices_;
   delete faces_;
 }
@@ -111,17 +111,56 @@ const int Model::get_vertex_buffer_id() const {
 }
 
 const int Model::get_num_vertices() const {
-  return num_vertices_;
+  return faces_->size() * 3;
 }
 
 uint Model::get_vertex_id(const Vertex &v) {
   map<Vertex,int>::iterator found = vertices_->find(v);
   if (found == vertices_->end()) {
     // Add new vertex.
-    vertices_->insert(pair<Vertex,int>(v, id_incr_++));
-    return id_incr_ - 1;
+    vertices_->insert(pair<Vertex,int>(v, max_vbo_id_++));
+    return max_vbo_id_ - 1;
   } else {
     // Existing vertex.
     return found->second;
   }
+}
+
+void Model::build_vbo() {
+  vector<unsigned int> indices;
+  map<Vertex,int>::iterator it;
+
+  // TODO: Do this for the normals and texcoords too.
+
+  // Generate our float arrays
+  float *vertex_data = new float[vertices_->size() * 3];
+  for (it = vertices_->begin(); it != vertices_->end(); ++it) {
+    vertex_data[it->second * 3 + 0] = it->first.pos.x;
+    vertex_data[it->second * 3 + 1] = it->first.pos.y;
+    vertex_data[it->second * 3 + 2] = it->first.pos.z;
+  }
+
+  // Fill indices
+  for (auto poly : *faces_) {
+    indices.push_back(poly.v1);
+    indices.push_back(poly.v2);
+    indices.push_back(poly.v3);
+  }
+
+  // Build the Buffers
+  glGenVertexArrays(1, &vertex_array_id_);
+  glBindVertexArray(vertex_array_id_);
+
+  glGenBuffers(1, &vertex_buffer_);
+  glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_data), vertex_data, GL_STATIC_DRAW);
+
+  // Build the VBO
+  glGenBuffers(1, &element_buffer_id_);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element_buffer_id_);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int),
+               &indices[0], GL_STATIC_DRAW);
+
+  // Free our float arrays
+  delete [] vertex_data;
 }
