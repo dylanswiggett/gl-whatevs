@@ -165,16 +165,18 @@ void Model::build_vbo() {
     vertex_data[it->second * 3 + 0] = it->first.pos.x;
     vertex_data[it->second * 3 + 1] = it->first.pos.y;
     vertex_data[it->second * 3 + 2] = it->first.pos.z;
+
     normal_data[it->second * 3 + 0] = it->first.norm.x;
     normal_data[it->second * 3 + 1] = it->first.norm.y;
     normal_data[it->second * 3 + 2] = it->first.norm.z;
+
     texture_data[it->second * 2 + 0] = it->first.tex.x;
     texture_data[it->second * 2 + 1] = it->first.tex.y;
   }
 
   // Fill indices
   for (auto poly : *faces_) {
-    indices.push_back(poly.v1 + 30000000);
+    indices.push_back(poly.v1);
     indices.push_back(poly.v2);
     indices.push_back(poly.v3);
   }
@@ -182,15 +184,15 @@ void Model::build_vbo() {
   // Build the Buffers
   glGenBuffers(1, &vertex_buffer_);
   glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_data), vertex_data, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * (vertices_->size() * 3), vertex_data, GL_STATIC_DRAW);
 
   glGenBuffers(1, &normal_buffer_);
   glBindBuffer(GL_ARRAY_BUFFER, normal_buffer_);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(normal_data), normal_data, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices_->size() * 3, normal_data, GL_STATIC_DRAW);
 
   glGenBuffers(1, &texcoord_buffer_);
   glBindBuffer(GL_ARRAY_BUFFER, texcoord_buffer_);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(texture_data), texture_data, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices_->size() * 2, texture_data, GL_STATIC_DRAW);
 
   // Build the VBO
   glGenBuffers(1, &element_buffer_id_);
@@ -200,4 +202,6 @@ void Model::build_vbo() {
 
   // Free our float arrays
   delete [] vertex_data;
+  delete [] normal_data;
+  delete [] texture_data;
 }
