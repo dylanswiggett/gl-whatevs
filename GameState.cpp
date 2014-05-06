@@ -1,9 +1,11 @@
 #include "GameState.hpp"
 #include <map>
+#include <string>
 #include "glm/glm.hpp"
 
 GameState::GameState(GLHandler *gl_handler) {
   model_instances_ = new std::map<int,ModelInstance *>();
+  model_instance_ids_ = new std::map<std::string,int>();
   // current_camera_ = new Camera(90, .01, 100,
   //   ((double) gl_handler->get_width()) / gl_handler->get_height());
   current_camera_ = cameraTowards(
@@ -22,6 +24,8 @@ GameState::~GameState() {
     delete it->second;
   }
 
+  delete model_instance_ids_;
+
   delete model_instances_;
   delete current_camera_;
 }
@@ -30,14 +34,19 @@ void GameState::set_camera(Camera *newCamera) {
   current_camera_ = newCamera;
 }
 
-int GameState::add_model_instance(ModelInstance *newInstance) {
+int GameState::add_model_instance(std::string name, ModelInstance *newInstance) {
   model_instances_->insert(std::pair<int,ModelInstance *>(id_incr_, newInstance));
+  model_instance_ids_->insert(std::pair<std::string,int>(name, id_incr_));
   id_incr_++;
   return id_incr_ - 1;
 }
 
 ModelInstance *GameState::get_model_instance(int id) {
   return model_instances_->find(id)->second;
+}
+
+int GameState::get_model_instance_id(std::string name) {
+  return model_instance_ids_->find(name)->second;
 }
 
 void GameState::step() {

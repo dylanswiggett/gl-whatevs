@@ -24,37 +24,42 @@ GameLoop::~GameLoop() {
  * TODO: Make a better setup procedure!
  */
 void GameLoop::hacky_setup() {
-  Model *cubeModel = new Model("models/suzy.obj");
+  Model *suzanneModel = new Model("models/suzy.obj");
+  Model *cubeModel = new Model("models/cube.obj");
 
   Shader *testShader = new Shader("shaders/shader.vert", "shaders/shader.frag");
 
+  gl_handler_->add_model("suzanna", suzanneModel);
   gl_handler_->add_model("cube", cubeModel);
+
   gl_handler_->add_shader("test", testShader);
 
   ModelInstance *instance = new ModelInstance(
-    gl_handler_->get_model_id("cube"),
+    gl_handler_->get_model_id("suzanna"),
     gl_handler_->get_shader_id("test"));
 
   instance->setPosition(glm::vec3(0, .5, 0));
   instance->setRotation(glm::vec3(0, 1, 0), .5);
+  instance->setScale(glm::vec3(4, 4, 4));
 
-  game_state_->add_model_instance(instance);
+  game_state_->add_model_instance("suzanne", instance);
 
   instance = new ModelInstance(
     gl_handler_->get_model_id("cube"),
     gl_handler_->get_shader_id("test"));
 
   instance->setPosition(glm::vec3(0, -3, 0));
-  instance->setRotation(glm::vec3(0, 1, 0), 2);
-  instance->setScale(glm::vec3(2, 2, 3));
+  instance->setScale(glm::vec3(.5, .5, .5));
 
-  game_state_->add_model_instance(instance);
+  game_state_->add_model_instance("cube", instance);
 }
 
 int GameLoop::run_game_loop() {
   SDL_Event event;
 
   hacky_setup(); // :(
+
+  float rot = 0;
 
   while (game_running_) {
     /*
@@ -66,6 +71,10 @@ int GameLoop::run_game_loop() {
           game_running_ = false;
       }
     }
+
+    game_state_->get_model_instance(game_state_->get_model_instance_id("suzanne"))->setRotation(glm::vec3(0, 1, 0), rot);
+    game_state_->get_model_instance(game_state_->get_model_instance_id("cube"))->setRotation(glm::vec3(1, 1, 0), -rot);
+    rot += .4;
 
     game_state_->step();
 

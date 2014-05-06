@@ -17,7 +17,10 @@ class ModelInstance {
 
   const glm::mat4 getModelMatrix() const;
  private:
+  void build_matrix();
+
   glm::vec3 pos_, scale_, rot_;
+  glm::mat4 matrix_;
   float rot_amount_;
   int model_id_, shader_id_;
 };
