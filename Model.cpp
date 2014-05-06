@@ -113,18 +113,29 @@ const GLuint Model::get_element_buffer_id() const {
 }
 
 void Model::bind_gl_data() const {
-  glBindVertexArray(vertex_array_id_);
   glEnableVertexAttribArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
-  glVertexAttribPointer(0, 3, 
-                        GL_FLOAT, GL_FALSE, 0, (void *)0);
+  glVertexAttribPointer(
+    0, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
+
+  glEnableVertexAttribArray(1);
+  glBindBuffer(GL_ARRAY_BUFFER, texcoord_buffer_);
+  glVertexAttribPointer(
+    1, 2, GL_FLOAT, GL_FALSE, 0, (void *)0);
+
+  glEnableVertexAttribArray(2);
+  glBindBuffer(GL_ARRAY_BUFFER, normal_buffer_);
+  glVertexAttribPointer(
+    2, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
 }
 
 void Model::unbind_gl_data() const {
   glDisableVertexAttribArray(0);
+  glDisableVertexAttribArray(1);
+  glDisableVertexAttribArray(2);
 }
 
-const int Model::get_num_vertices() const {
+const unsigned int Model::get_num_vertices() const {
   return faces_->size() * 3;
 }
 
@@ -148,26 +159,38 @@ void Model::build_vbo() {
 
   // Generate our float arrays
   float *vertex_data = new float[vertices_->size() * 3];
+  float *normal_data = new float[vertices_->size() * 3];
+  float *texture_data = new float[vertices_->size() * 2];
   for (it = vertices_->begin(); it != vertices_->end(); ++it) {
     vertex_data[it->second * 3 + 0] = it->first.pos.x;
     vertex_data[it->second * 3 + 1] = it->first.pos.y;
     vertex_data[it->second * 3 + 2] = it->first.pos.z;
+    normal_data[it->second * 3 + 0] = it->first.norm.x;
+    normal_data[it->second * 3 + 1] = it->first.norm.y;
+    normal_data[it->second * 3 + 2] = it->first.norm.z;
+    texture_data[it->second * 2 + 0] = it->first.tex.x;
+    texture_data[it->second * 2 + 1] = it->first.tex.y;
   }
 
   // Fill indices
   for (auto poly : *faces_) {
-    indices.push_back(poly.v1);
+    indices.push_back(poly.v1 + 30000000);
     indices.push_back(poly.v2);
     indices.push_back(poly.v3);
   }
 
   // Build the Buffers
-  glGenVertexArrays(1, &vertex_array_id_);
-  glBindVertexArray(vertex_array_id_);
-
   glGenBuffers(1, &vertex_buffer_);
   glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_data), vertex_data, GL_STATIC_DRAW);
+
+  glGenBuffers(1, &normal_buffer_);
+  glBindBuffer(GL_ARRAY_BUFFER, normal_buffer_);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(normal_data), normal_data, GL_STATIC_DRAW);
+
+  glGenBuffers(1, &texcoord_buffer_);
+  glBindBuffer(GL_ARRAY_BUFFER, texcoord_buffer_);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(texture_data), texture_data, GL_STATIC_DRAW);
 
   // Build the VBO
   glGenBuffers(1, &element_buffer_id_);

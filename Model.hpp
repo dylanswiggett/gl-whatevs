@@ -49,15 +49,13 @@ class Model {
   const GLuint get_element_buffer_id() const;
   void bind_gl_data() const;
   void unbind_gl_data() const;
-  const int get_num_vertices() const;
+  const unsigned int get_num_vertices() const;
  private:
   uint get_vertex_id(const Vertex &v);
   void build_vbo();
 
   std::map<Vertex,int> *vertices_;
   std::vector<Polygon> *faces_;
-
-  GLuint vertex_array_id_;
 
   GLuint vertex_buffer_;
   GLuint normal_buffer_;

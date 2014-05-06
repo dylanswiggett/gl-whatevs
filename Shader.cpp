@@ -36,8 +36,7 @@ void Shader::draw(const Model *model, const ModelInstance *model_instance,
   model->bind_gl_data();
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->get_element_buffer_id());
-  glDrawElements(GL_TRIANGLES, model->get_num_vertices(), GL_UNSIGNED_INT, (void*)0);
-  std::cout << "Drew element buffer " << model->get_element_buffer_id() << ", with " << model->get_num_vertices() << " vertices." << std::endl;
+  glDrawElements(GL_TRIANGLES, model->get_num_vertices(), GL_UNSIGNED_INT, NULL);
 
   model->unbind_gl_data();
 

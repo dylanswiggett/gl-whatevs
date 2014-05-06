@@ -17,6 +17,13 @@ GLHandler::GLHandler(int width, int height) :
   shaders_ = new map<int,Shader *>();
   shader_ids_ = new map<string,int>();
   id_incr_ = 1;
+
+  glGenVertexArrays(1, &vertex_array_id_);
+  glBindVertexArray(vertex_array_id_);
+
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LESS);
+  
 }
 
 GLHandler::~GLHandler() {

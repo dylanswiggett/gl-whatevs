@@ -24,24 +24,24 @@ GameLoop::~GameLoop() {
  * TODO: Make a better setup procedure!
  */
 void GameLoop::hacky_setup() {
-  Model *triangleModel = new Model("models/cube.obj");
+  Model *cubeModel = new Model("models/suzy.obj");
 
   Shader *testShader = new Shader("shaders/shader.vert", "shaders/shader.frag");
 
-  gl_handler_->add_model("triangle", triangleModel);
+  gl_handler_->add_model("cube", cubeModel);
   gl_handler_->add_shader("test", testShader);
 
   ModelInstance *instance = new ModelInstance(
-    gl_handler_->get_model_id("triangle"),
+    gl_handler_->get_model_id("cube"),
     gl_handler_->get_shader_id("test"));
 
   instance->setPosition(glm::vec3(0, .5, 0));
   instance->setRotation(glm::vec3(0, 1, 0), .5);
 
-  // game_state_->add_model_instance(instance);
+  game_state_->add_model_instance(instance);
 
   instance = new ModelInstance(
-    gl_handler_->get_model_id("triangle"),
+    gl_handler_->get_model_id("cube"),
     gl_handler_->get_shader_id("test"));
 
   instance->setPosition(glm::vec3(0, -3, 0));

@@ -29,6 +29,8 @@ class GLHandler {
  private:
   int id_incr_;
 
+  GLuint vertex_array_id_;
+
   std::map<int,Model *> *models_;
   std::map<std::string,int> *model_ids_;
 
