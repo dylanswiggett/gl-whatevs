@@ -2,8 +2,14 @@
 #include "GL/glew.h"
 #include "GL/gl.h"
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <vector>
 
-#define DEFAULT_PROGRAM_ID
+#define MAX_FILE_LINE_LENGTH 1024
+
+using namespace std;
 
 Model::Model(const GLfloat *vertex_buffer_data, int num_vertices) :
   vertex_buffer_data_(vertex_buffer_data),
@@ -14,11 +20,33 @@ Model::Model(const GLfloat *vertex_buffer_data, int num_vertices) :
   glGenBuffers(1, &vertex_buffer_);
   glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
   glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * num_vertices * 3,
-               vertex_buffer_data, GL_STATIC_DRAW);
+               vertex_buffer_data_, GL_STATIC_DRAW);
+}
+
+Model::Model(std::string filepath) {
+  fstream f;
+  char line[MAX_FILE_LINE_LENGTH];
+  string buf;
+
+  f.open(filepath, fstream::in);
+  if (f.fail())
+    throw "File not found: " + filepath;
+
+  while (!f.fail()) {
+    f.getline(line, MAX_FILE_LINE_LENGTH);
+
+    // Thanks, stackoverflow...
+    // Splits the line around spaces.
+    vector<string> terms;
+    stringstream stream(line);
+    while (stream >> buf)
+      terms.push_back(buf);
+  }
+
+  f.close();
 }
 
 Model::~Model() {
-  /* TODO: Free vertex information, and remove from OpenGL */
   glDeleteVertexArrays(1, &vertex_array_id_);
   delete vertex_buffer_data_;
 }

@@ -3,10 +3,12 @@
 
 #include "GL/glew.h"
 #include "GL/gl.h"
+#include <string>
 
 class Model {
  public:
   Model(const GLfloat *vertex_buffer_data, const int num_vertices);
+  Model(std::string filepath);
   ~Model();
 
   const int get_vertex_buffer_id() const;
