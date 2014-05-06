@@ -24,13 +24,7 @@ GameLoop::~GameLoop() {
  * TODO: Make a better setup procedure!
  */
 void GameLoop::hacky_setup() {
-  GLfloat *vertices = new GLfloat[9];
-
-  vertices[0] = -1.0f; vertices[1] = -1.0f; vertices[2] = 0.0f;
-  vertices[3] =  1.0f; vertices[4] = -1.0f; vertices[5] = 0.0f;
-  vertices[6] =  0.0f; vertices[7] =  1.0f; vertices[8] = 0.0f;
-
-  Model *triangleModel = new Model(vertices, 3);
+  Model *triangleModel = new Model("models/cube.obj");
 
   Shader *testShader = new Shader("shaders/shader.vert", "shaders/shader.frag");
 
