@@ -2,18 +2,40 @@
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include <vector>
+
+#define DEFAULT_POS   vec3(0,0,0)
+#define DEFAULT_SCALE vec3(1,1,1)
+#define DEFAULT_ROT   vec3(1,0,0)
+#define DEFAULT_ROTA  0
 
 using namespace glm;
 
-ModelInstance::ModelInstance(int modelId, int shaderId) :
-  pos_(vec3(0, 0, 0)),
-  scale_(vec3(1, 1, 1)),
-  rot_(vec3(1, 0, 0)),
-  rot_amount_(0)
+ModelInstance::ModelInstance(Model *model) :
+  pos_        (DEFAULT_POS),
+  scale_      (DEFAULT_SCALE),
+  rot_        (DEFAULT_ROT),
+  rot_amount_ (DEFAULT_ROTA)
 {
-  model_id_ = modelId;
-  shader_id_ = shaderId;
+  model_ = model;
+  shader_ids_ = new std::vector<ShaderInstance>();
   build_matrix();
+}
+
+ModelInstance::ModelInstance(Model *model, int shaderId) :
+  pos_        (DEFAULT_POS),
+  scale_      (DEFAULT_SCALE),
+  rot_        (DEFAULT_ROT),
+  rot_amount_ (DEFAULT_ROTA)
+{
+  model_ = model;
+  shader_ids_ = new std::vector<ShaderInstance>();
+  add_shader(shaderId);
+  build_matrix();
+}
+
+ModelInstance::~ModelInstance() {
+  delete shader_ids_;
 }
 
 void ModelInstance::setPosition(glm::vec3 newPos) {
@@ -32,12 +54,12 @@ void ModelInstance::setRotation(glm::vec3 rotAxis, float rotAmount) {
   build_matrix();
 }
 
-int ModelInstance::get_model_id() {
-  return model_id_;
+Model *ModelInstance::get_model() {
+  return model_;
 }
 
-int ModelInstance::get_shader_id() {
-  return shader_id_;
+const std::vector<ShaderInstance> *ModelInstance::get_shader_ids() {
+  return shader_ids_;
 }
 
 void ModelInstance::build_matrix() {
@@ -46,4 +68,23 @@ void ModelInstance::build_matrix() {
 
 const glm::mat4 ModelInstance::getModelMatrix() const {
   return matrix_;
+}
+
+void ModelInstance::add_shader(int shader_id) {
+  ShaderInstance newShader = {shader_id, true};
+  shader_ids_->push_back(newShader);
+}
+
+void ModelInstance::enable_shader(int shader_id) {
+  for (auto shader_instance : *shader_ids_) {
+    if (shader_instance.shader_id == shader_id)
+      shader_instance.enabled = true;
+  }
+}
+
+void ModelInstance::disable_shader(int shader_id) {
+  for (auto shader_instance : *shader_ids_) {
+    if (shader_instance.shader_id == shader_id)
+      shader_instance.enabled = false;
+  }
 }

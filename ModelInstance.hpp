@@ -3,22 +3,30 @@
 
 #include "glm/glm.hpp"
 #include <string>
+#include <vector>
+#include "Model.hpp"
+
+typedef struct {
+  int shader_id;
+  bool enabled;
+} ShaderInstance;
 
 class ModelInstance {
  public:
-  // TODO: ModelInstance(int modelId);
-  ModelInstance(int modelId, int shaderId);
+  ModelInstance(Model *model);
+  ModelInstance(Model *model, int shaderId);
+  ~ModelInstance();
 
   void setPosition(glm::vec3 newPos);
   void setScale(glm::vec3 newScale);
   void setRotation(glm::vec3 rotAxis, float rotAmount);
 
-  int get_model_id();
-  int get_shader_id();
+  Model *get_model();
+  const std::vector<ShaderInstance> *get_shader_ids();
 
-  // TODO: add_shader(int shader_id_);
-  // TODO: enable_shader(int shader_id_);
-  // TODO: disable_shader(int shader_id_);
+  void add_shader(int shader_id);
+  void enable_shader(int shader_id);
+  void disable_shader(int shader_id);
 
   const glm::mat4 getModelMatrix() const;
  private:
@@ -29,7 +37,8 @@ class ModelInstance {
   glm::vec3 pos_, scale_, rot_;
   glm::mat4 matrix_;
   float rot_amount_;
-  int model_id_, shader_id_;
+  Model *model_;
+  std::vector<ShaderInstance> *shader_ids_;
 };
 
 #endif  // _MODEL_INSTANCE_HPP_

@@ -9,11 +9,14 @@
 
 class Shader {
  public:
-  Shader(std::string vertexPath, std::string fragPath);
+  Shader(std::string vertexPath, std::string fragPath, double priority);
   ~Shader();
 
   void draw(const Model *model, const ModelInstance *model_instance, const Camera *camera);
+
+  double getPriority();
  private:
+  double priority_;
   GLuint program_id_;
 };
 

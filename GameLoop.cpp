@@ -52,6 +52,19 @@ void GameLoop::hacky_setup() {
   instance->setScale(glm::vec3(.5, .5, .5));
 
   game_state_->add_model_instance("cube", instance);
+
+  for (int x = -10; x <= 10; x++) {
+    for (int y = -10; y <= 10; y++) {
+      instance = new ModelInstance(
+        gl_handler_->get_model_id("cube"),
+        gl_handler_->get_shader_id("test"));
+
+      instance->setPosition(glm::vec3(x, y, 5));
+      instance->setScale(glm::vec3(.2, .2, .2));
+
+      game_state_->add_model_instance("cube", instance);
+    }
+  }
 }
 
 int GameLoop::run_game_loop() {

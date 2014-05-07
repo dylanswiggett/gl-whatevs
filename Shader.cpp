@@ -13,7 +13,9 @@
 #define CAMERA_MATRIX_NAME "cameraMat"
 #define PROJECTION_MATRIX_NAME "projMat"
 
-Shader::Shader(std::string vertexPath, std::string fragPath) {
+Shader::Shader(std::string vertexPath, std::string fragPath, double priority) :
+  priority_(priority)
+{
   program_id_ = LoadShaders(
     "shaders/shader.vert", "shaders/shader.frag");
 }
