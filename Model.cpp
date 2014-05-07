@@ -94,6 +94,8 @@ Model::Model(std::string filepath) :
       newPolygon.v3 =  get_vertex_id(newVertex);
 
       faces_->push_back(newPolygon);
+
+      // TODO: Actually prep the texture.
     }
   }
 
