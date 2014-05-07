@@ -106,6 +106,10 @@ Model::Model(std::string filepath) :
 
 Model::~Model() {
   // TODO: Free all opengl allocations
+  glDeleteBuffers(1, &vertex_buffer_);
+  glDeleteBuffers(1, &normal_buffer_);
+  glDeleteBuffers(1, &texcoord_buffer_);
+  glDeleteBuffers(1, &element_buffer_id_);
   delete vertices_;
   delete faces_;
 }

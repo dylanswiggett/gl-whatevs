@@ -21,6 +21,7 @@ Shader::Shader(std::string vertexPath, std::string fragPath, double priority) :
 }
 
 Shader::~Shader() {
+  glDeleteProgram(program_id_);
 }
 
 void Shader::draw(ModelInstance **model_instances, int num_instances, const Camera *camera) {
