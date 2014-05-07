@@ -41,10 +41,10 @@ ShaderGroup *GameState::get_shader_instance(int id) {
 
   if (draw_order_.size() > 0) {
     while (pos < (int) draw_order_.size() &&
-           shader->getPriority() < draw_order_[pos].shader->getPriority())
+           shader->getPriority() > draw_order_[pos].shader->getPriority())
       pos++;
 
-    if (draw_order_[pos].shader_id == id)
+    if (pos < (int) draw_order_.size() && draw_order_[pos].shader_id == id)
       return &(draw_order_[pos]);
   }
 

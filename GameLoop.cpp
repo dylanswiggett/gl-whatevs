@@ -24,19 +24,15 @@ GameLoop::~GameLoop() {
  * TODO: Make a better setup procedure!
  */
 void GameLoop::hacky_setup() {
-  Model *suzanneModel = new Model("models/suzy.obj");
-  Model *cubeModel = new Model("models/cube.obj");
+  gl_handler_->add_model("suzanna", new Model("models/suzy.obj"));
+  gl_handler_->add_model("cube", new Model("models/cube.obj"));
 
-  Shader *testShader = new Shader("shaders/shader.vert", "shaders/shader.frag", 1);
-
-  gl_handler_->add_model("suzanna", suzanneModel);
-  gl_handler_->add_model("cube", cubeModel);
-
-  gl_handler_->add_shader("test", testShader);
+  gl_handler_->add_shader("default", new Shader("shaders/default.vert", "shaders/default.frag", .5));
+  gl_handler_->add_shader("squiggly", new Shader("shaders/squiggly.vert", "shaders/color_shader.frag", .5));
 
   ModelInstance *instance = new ModelInstance(
     gl_handler_->get_model("suzanna"),
-    gl_handler_->get_shader_id("test"));
+    gl_handler_->get_shader_id("squiggly"));
 
   instance->setPosition(glm::vec3(0, .5, 0));
   instance->setRotation(glm::vec3(0, 1, 0), .5);
@@ -46,7 +42,7 @@ void GameLoop::hacky_setup() {
 
   instance = new ModelInstance(
     gl_handler_->get_model("cube"),
-    gl_handler_->get_shader_id("test"));
+    gl_handler_->get_shader_id("squiggly"));
 
   instance->setPosition(glm::vec3(0, -3, 0));
   instance->setScale(glm::vec3(.5, .5, .5));
@@ -57,12 +53,12 @@ void GameLoop::hacky_setup() {
     for (int y = -10; y <= 10; y++) {
       instance = new ModelInstance(
         gl_handler_->get_model("cube"),
-        gl_handler_->get_shader_id("test"));
+        gl_handler_->get_shader_id("default"));
 
       instance->setPosition(glm::vec3(x, y, 5));
       instance->setScale(glm::vec3(.2, .2, .2));
 
-      game_state_->add_model_instance("cube", instance);
+      game_state_->add_model_instance("cube" + x + y, instance);
     }
   }
 }

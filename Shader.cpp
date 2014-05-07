@@ -16,8 +16,7 @@
 Shader::Shader(std::string vertexPath, std::string fragPath, double priority) :
   priority_(priority)
 {
-  program_id_ = LoadShaders(
-    "shaders/shader.vert", "shaders/shader.frag");
+  program_id_ = LoadShaders(vertexPath.c_str(), fragPath.c_str());
 }
 
 Shader::~Shader() {
