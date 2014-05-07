@@ -3,9 +3,17 @@
 
 #include <map>
 #include <string>
+#include <vector>
 #include "GLHandler.hpp"
 #include "Camera.hpp"
 #include "ModelInstance.hpp"
+
+typedef struct {
+  Shader *shader;
+  int shader_id;
+  bool shader_enabled;
+  std::vector<ModelInstance *> shaded_instances;
+} ShaderGroup;
 
 class GameState {
  public:
@@ -23,6 +31,9 @@ class GameState {
   void step();
   void draw();
  private:
+  ShaderGroup *get_shader_instance(int id);
+
+  std::vector<ShaderGroup> draw_order_;
   std::map<std::string,int> *model_instance_ids_;
   std::map<int,ModelInstance *> *model_instances_;
   Camera *current_camera_;

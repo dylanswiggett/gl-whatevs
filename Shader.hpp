@@ -12,7 +12,7 @@ class Shader {
   Shader(std::string vertexPath, std::string fragPath, double priority);
   ~Shader();
 
-  void draw(const Model *model, const ModelInstance *model_instance, const Camera *camera);
+  void draw(ModelInstance **model_instances, int num_instances, const Camera *camera);
 
   double getPriority();
  private:

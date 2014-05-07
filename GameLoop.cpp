@@ -27,7 +27,7 @@ void GameLoop::hacky_setup() {
   Model *suzanneModel = new Model("models/suzy.obj");
   Model *cubeModel = new Model("models/cube.obj");
 
-  Shader *testShader = new Shader("shaders/shader.vert", "shaders/shader.frag");
+  Shader *testShader = new Shader("shaders/shader.vert", "shaders/shader.frag", 1);
 
   gl_handler_->add_model("suzanna", suzanneModel);
   gl_handler_->add_model("cube", cubeModel);
@@ -35,7 +35,7 @@ void GameLoop::hacky_setup() {
   gl_handler_->add_shader("test", testShader);
 
   ModelInstance *instance = new ModelInstance(
-    gl_handler_->get_model_id("suzanna"),
+    gl_handler_->get_model("suzanna"),
     gl_handler_->get_shader_id("test"));
 
   instance->setPosition(glm::vec3(0, .5, 0));
@@ -45,7 +45,7 @@ void GameLoop::hacky_setup() {
   game_state_->add_model_instance("suzanne", instance);
 
   instance = new ModelInstance(
-    gl_handler_->get_model_id("cube"),
+    gl_handler_->get_model("cube"),
     gl_handler_->get_shader_id("test"));
 
   instance->setPosition(glm::vec3(0, -3, 0));
@@ -56,7 +56,7 @@ void GameLoop::hacky_setup() {
   for (int x = -10; x <= 10; x++) {
     for (int y = -10; y <= 10; y++) {
       instance = new ModelInstance(
-        gl_handler_->get_model_id("cube"),
+        gl_handler_->get_model("cube"),
         gl_handler_->get_shader_id("test"));
 
       instance->setPosition(glm::vec3(x, y, 5));

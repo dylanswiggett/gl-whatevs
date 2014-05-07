@@ -53,6 +53,10 @@ int GLHandler::get_model_id(const std::string name) const {
   return model_ids_->find(name)->second;
 }
 
+Model *GLHandler::get_model(const std::string name) const {
+  return get_model(get_model_id(name));
+}
+
 Model *GLHandler::get_model(const int id) const {
   return models_->find(id)->second;
 }

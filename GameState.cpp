@@ -1,4 +1,5 @@
 #include "GameState.hpp"
+#include "ModelInstance.hpp"
 #include <map>
 #include <string>
 #include "glm/glm.hpp"
@@ -34,11 +35,40 @@ void GameState::set_camera(Camera *newCamera) {
   current_camera_ = newCamera;
 }
 
+ShaderGroup *GameState::get_shader_instance(int id) {
+  Shader *shader = gl_handler_->get_shader(id);
+  int pos = 0;
+
+  if (draw_order_.size() > 0) {
+    while (pos < (int) draw_order_.size() &&
+           shader->getPriority() < draw_order_[pos].shader->getPriority())
+      pos++;
+
+    if (draw_order_[pos].shader_id == id)
+      return &(draw_order_[pos]);
+  }
+
+  // New shader
+  ShaderGroup newInstance;
+  newInstance.shader = shader;
+  newInstance.shader_id = id;
+  newInstance.shader_enabled = true;
+  draw_order_.insert(draw_order_.begin() + pos, newInstance);
+
+  return &(draw_order_[pos]);
+}
+
 int GameState::add_model_instance(std::string name, ModelInstance *newInstance) {
-  model_instances_->insert(std::pair<int,ModelInstance *>(id_incr_, newInstance));
-  model_instance_ids_->insert(std::pair<std::string,int>(name, id_incr_));
-  id_incr_++;
-  return id_incr_ - 1;
+  int new_id = id_incr_++;
+  model_instances_->insert(std::pair<int,ModelInstance *>(new_id, newInstance));
+  model_instance_ids_->insert(std::pair<std::string,int>(name, new_id));
+
+  for (auto shader_instance : *(newInstance->get_shader_ids())) {
+    ShaderGroup *group = get_shader_instance(shader_instance.shader_id);
+    group->shaded_instances.push_back(newInstance);
+  }
+
+  return new_id;
 }
 
 ModelInstance *GameState::get_model_instance(int id) {
@@ -54,15 +84,9 @@ void GameState::step() {
 }
 
 void GameState::draw() {
-  // TODO: Group drawing instances by shader, to improve performance.
-  // TODO: Support multiple shaders on each model.
-
-  // Draw every modelInstance individually
-  std::map<int,ModelInstance *>::iterator it;
-  for (it = model_instances_->begin(); it != model_instances_->end(); ++it) {
-    gl_handler_->get_shader(it->second->get_shader_id())->draw(
-               gl_handler_->get_model(it->second->get_model_id()),
-               it->second,
-               current_camera_);
+  for (auto shader_group : draw_order_) {
+    if (shader_group.shader_enabled)
+      shader_group.shader->draw(&(shader_group.shaded_instances[0]), 
+                                shader_group.shaded_instances.size(), current_camera_);
   }
 }
