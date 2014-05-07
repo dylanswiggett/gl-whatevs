@@ -32,8 +32,6 @@ class ModelInstance {
  private:
   void build_matrix();
 
-  // TODO: Store a pointer to the model rather than a modelId.
-
   glm::vec3 pos_, scale_, rot_;
   glm::mat4 matrix_;
   float rot_amount_;

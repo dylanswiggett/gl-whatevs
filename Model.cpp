@@ -105,7 +105,6 @@ Model::Model(std::string filepath) :
 }
 
 Model::~Model() {
-  // TODO: Free all opengl allocations
   glDeleteBuffers(1, &vertex_buffer_);
   glDeleteBuffers(1, &normal_buffer_);
   glDeleteBuffers(1, &texcoord_buffer_);
@@ -160,9 +159,7 @@ uint Model::get_vertex_id(const Vertex &v) {
 void Model::build_vbo() {
   vector<unsigned int> indices;
   map<Vertex,int>::iterator it;
-
-  // TODO: Do this for the normals and texcoords too.
-
+  
   // Generate our float arrays
   float *vertex_data = new float[vertices_->size() * 3];
   float *normal_data = new float[vertices_->size() * 3];
