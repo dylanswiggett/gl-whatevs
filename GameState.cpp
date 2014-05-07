@@ -54,6 +54,9 @@ void GameState::step() {
 }
 
 void GameState::draw() {
+  // TODO: Group drawing instances by shader, to improve performance.
+  // TODO: Support multiple shaders on each model.
+
   // Draw every modelInstance individually
   std::map<int,ModelInstance *>::iterator it;
   for (it = model_instances_->begin(); it != model_instances_->end(); ++it) {

@@ -23,6 +23,8 @@ Shader::~Shader() {
 
 void Shader::draw(const Model *model, const ModelInstance *model_instance,
                   const Camera *camera) {
+  // TODO: Update to accept a list of models rather than a single model.
+
   glUseProgram(program_id_);
 
   GLuint modelMatId = glGetUniformLocation(program_id_, MODEL_MATRIX_NAME);

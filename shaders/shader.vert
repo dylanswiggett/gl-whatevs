@@ -9,6 +9,10 @@ uniform mat4 cameraMat, projMat, modelMat;
 out vec3 normal;
 
 void main() {
-	gl_Position = (projMat * cameraMat * modelMat) * vec4(vertexPosition_modelspace, 1);
-	normal = vertexNormal;
+	vec4 world_pos = modelMat * vec4(vertexPosition_modelspace, 1);
+	world_pos.y += cos(world_pos.x) + sin(world_pos.z);
+	// world_pos.z -= sin(world_pos.x);
+	// world_pos.y *= (sin(world_pos.y * .1) + 2) / 3;
+	gl_Position = projMat * cameraMat * world_pos;
+	normal = (modelMat * vec4(vertexNormal + vertexPosition_modelspace, 1) - world_pos).xyz;
 }

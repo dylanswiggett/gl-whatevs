@@ -6,6 +6,7 @@
 
 class ModelInstance {
  public:
+  // TODO: ModelInstance(int modelId);
   ModelInstance(int modelId, int shaderId);
 
   void setPosition(glm::vec3 newPos);
@@ -15,9 +16,15 @@ class ModelInstance {
   int get_model_id();
   int get_shader_id();
 
+  // TODO: add_shader(int shader_id_);
+  // TODO: enable_shader(int shader_id_);
+  // TODO: disable_shader(int shader_id_);
+
   const glm::mat4 getModelMatrix() const;
  private:
   void build_matrix();
+
+  // TODO: Store a pointer to the model rather than a modelId.
 
   glm::vec3 pos_, scale_, rot_;
   glm::mat4 matrix_;
