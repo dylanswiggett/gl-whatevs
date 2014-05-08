@@ -10,7 +10,7 @@ out vec3 normal;
 
 void main() {
 	vec4 world_pos = modelMat * vec4(vertexPosition_modelspace, 1);
-	world_pos.y += cos(world_pos.x) + sin(world_pos.z);
+	world_pos.y += cos(world_pos.x * world_pos.x / 4) + sin(world_pos.z);
 	gl_Position = projMat * cameraMat * world_pos;
 	normal = normalize(modelMat * vec4(vertexNormal + vertexPosition_modelspace, 1) - world_pos).xyz;
 }

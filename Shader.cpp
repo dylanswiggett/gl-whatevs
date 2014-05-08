@@ -9,10 +9,6 @@
 #include "GL/gl.h"
 #include <iostream>
 
-#define MODEL_MATRIX_NAME "modelMat"
-#define CAMERA_MATRIX_NAME "cameraMat"
-#define PROJECTION_MATRIX_NAME "projMat"
-
 Shader::Shader(std::string vertexPath, std::string fragPath, double priority) :
   priority_(priority)
 {
@@ -26,9 +22,9 @@ Shader::~Shader() {
 void Shader::draw(ModelInstance **model_instances, int num_instances, const Camera *camera) {
   glUseProgram(program_id_);
 
-  GLuint modelMatId = glGetUniformLocation(program_id_, MODEL_MATRIX_NAME);
-  GLuint cameraMatId = glGetUniformLocation(program_id_, CAMERA_MATRIX_NAME);
-  GLuint projectionMatId = glGetUniformLocation(program_id_, PROJECTION_MATRIX_NAME);
+  GLuint modelMatId = glGetUniformLocation(program_id_, SHADER_MODEL_MATRIX_NAME);
+  GLuint cameraMatId = glGetUniformLocation(program_id_, SHADER_CAMERA_MATRIX_NAME);
+  GLuint projectionMatId = glGetUniformLocation(program_id_, SHADER_PROJECTION_MATRIX_NAME);
 
   glUniformMatrix4fv(cameraMatId, 1, GL_FALSE, &(camera->getCamMatrix())[0][0]);
   glUniformMatrix4fv(projectionMatId, 1, GL_FALSE, &(camera->getProjMatrix())[0][0]);

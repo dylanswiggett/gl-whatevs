@@ -3,6 +3,8 @@
 #include "SDL2/SDL.h"
 #include "shader_loader.hpp"
 #include "glm/glm.hpp"
+#include "Shader.hpp"
+#include "FrameBufferShader.hpp"
 
 #define FPS 60
 
@@ -27,27 +29,31 @@ void GameLoop::hacky_setup() {
   gl_handler_->add_model("suzanna", new Model("models/suzy.obj"));
   gl_handler_->add_model("smooth_suzanna", new Model("models/smooth_suzy.obj"));
   gl_handler_->add_model("cube", new Model("models/cube.obj"));
-  gl_handler_->add_model("scene", new Model("models/scene.obj"));
+  gl_handler_->add_model("scene", new Model("models/hires_scene.obj"));
 
-  gl_handler_->add_shader("default", new Shader("shaders/default.vert", "shaders/color_shader.frag", .5));
+  gl_handler_->add_shader("default", new Shader("shaders/default.vert", "shaders/default.frag", .5));
   gl_handler_->add_shader("squiggly", new Shader("shaders/squiggly.vert", "shaders/default.frag", .5));
+  gl_handler_->add_shader("crazy", new Shader("shaders/squiggly.vert", "shaders/color_shader.frag", .5));
+  gl_handler_->add_shader("crazy_fb",
+    new FrameBufferShader("shaders/squiggly.vert", "shaders/color_shader.frag", .5, 
+      gl_handler_->get_width(), gl_handler_->get_height()));
 
   ModelInstance *instance = new ModelInstance(
     gl_handler_->get_model("smooth_suzanna"),
     gl_handler_->get_shader_id("squiggly"));
 
   instance->setPosition(glm::vec3(0, .5, 0));
-  instance->setRotation(glm::vec3(0, 1, 0), .5);
+  instance->setRotation(glm::vec3(0, 1, 0), 200);
   instance->setScale(glm::vec3(4, 4, 4));
 
   game_state_->add_model_instance("suzanne", instance);
 
   instance = new ModelInstance(
     gl_handler_->get_model("scene"),
-    gl_handler_->get_shader_id("default"));
+    gl_handler_->get_shader_id("crazy_fb"));
 
   instance->setPosition(glm::vec3(0, -6, 2));
-  instance->setRotation(glm::vec3(0, 1, 0), 180);
+  instance->setRotation(glm::vec3(0, 1, 0), 60);
   instance->setScale(glm::vec3(2,2,2));
 
   game_state_->add_model_instance("scene", instance);
@@ -61,18 +67,18 @@ void GameLoop::hacky_setup() {
 
   game_state_->add_model_instance("cube", instance);
 
-  for (int x = -10; x <= 10; x++) {
-    for (int y = -10; y <= 10; y++) {
-      instance = new ModelInstance(
-        gl_handler_->get_model("suzanna"),
-        gl_handler_->get_shader_id("default"));
+  // for (int x = -10; x <= 10; x++) {
+  //   for (int y = -10; y <= 10; y++) {
+  //     instance = new ModelInstance(
+  //       gl_handler_->get_model("suzanna"),
+  //       gl_handler_->get_shader_id("default"));
 
-      instance->setPosition(glm::vec3(x, y, 5));
-      instance->setScale(glm::vec3(.2, .2, .2));
+  //     instance->setPosition(glm::vec3(x, y, 5));
+  //     instance->setScale(glm::vec3(.2, .2, .2));
 
-      game_state_->add_model_instance("cube" + x + y, instance);
-    }
-  }
+  //     game_state_->add_model_instance("cube" + x + y, instance);
+  //   }
+  // }
 }
 
 int GameLoop::run_game_loop() {
@@ -94,6 +100,7 @@ int GameLoop::run_game_loop() {
     }
 
     game_state_->get_model_instance(game_state_->get_model_instance_id("suzanne"))->setRotation(glm::vec3(0, 1, 0), rot);
+    game_state_->get_model_instance(game_state_->get_model_instance_id("scene"))->setRotation(glm::vec3(0, 1, 0), rot * .1);
     game_state_->get_model_instance(game_state_->get_model_instance_id("cube"))->setRotation(glm::vec3(1, 1, 0), -rot);
     rot += .4;
 
