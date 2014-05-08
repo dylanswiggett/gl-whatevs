@@ -65,13 +65,32 @@ Model::Model(std::string filepath) :
              strtof(terms[2].c_str(), NULL),
              strtof(terms[3].c_str(), NULL)));
     } else if (terms[0] == "f") {
-      sscanf(terms[1].c_str(), "%i/%i/%i", &p1, &t1, &n1);
-      sscanf(terms[2].c_str(), "%i/%i/%i", &p2, &t2, &n2);
-      sscanf(terms[3].c_str(), "%i/%i/%i", &p3, &t3, &n3);
+
+      if (terms[1].find("//") == string::npos) {
+        sscanf(terms[1].c_str(), "%i/%i/%i", &p1, &t1, &n1);
+        sscanf(terms[2].c_str(), "%i/%i/%i", &p2, &t2, &n2);
+        sscanf(terms[3].c_str(), "%i/%i/%i", &p3, &t3, &n3);
+      } else {
+        sscanf(terms[1].c_str(), "%i//%i", &p1, &n1);
+        sscanf(terms[2].c_str(), "%i//%i", &p2, &n2);
+        sscanf(terms[3].c_str(), "%i//%i", &p3, &n3);
+      }
+
+      p1 = p1 < 0 ? -p1 : p1;
+      p2 = p2 < 0 ? -p2 : p2;
+      p3 = p3 < 0 ? -p3 : p3;
+
+      t1 = t1 < 0 ? -t1 : t1;
+      t2 = t2 < 0 ? -t2 : t2;
+      t3 = t3 < 0 ? -t3 : t3;
+
+      n1 = n1 < 0 ? -n1 : n1;
+      n2 = n2 < 0 ? -n2 : n2;
+      n3 = n3 < 0 ? -n3 : n3;
 
       newVertex.pos = positions[p1 - 1];
       newVertex.norm = norms[n1 - 1];
-      if (t1 <= (int) textureCoords.size())
+      if (t1 <= (int) textureCoords.size()) 
         newVertex.tex = textureCoords[t1 - 1];
       else
         newVertex.tex = vec2();
@@ -159,7 +178,7 @@ uint Model::get_vertex_id(const Vertex &v) {
 void Model::build_vbo() {
   vector<unsigned int> indices;
   map<Vertex,int>::iterator it;
-  
+
   // Generate our float arrays
   float *vertex_data = new float[vertices_->size() * 3];
   float *normal_data = new float[vertices_->size() * 3];

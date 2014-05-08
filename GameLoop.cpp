@@ -25,13 +25,15 @@ GameLoop::~GameLoop() {
  */
 void GameLoop::hacky_setup() {
   gl_handler_->add_model("suzanna", new Model("models/suzy.obj"));
+  gl_handler_->add_model("smooth_suzanna", new Model("models/smooth_suzy.obj"));
   gl_handler_->add_model("cube", new Model("models/cube.obj"));
+  gl_handler_->add_model("scene", new Model("models/scene.obj"));
 
-  gl_handler_->add_shader("default", new Shader("shaders/default.vert", "shaders/default.frag", .5));
-  gl_handler_->add_shader("squiggly", new Shader("shaders/squiggly.vert", "shaders/color_shader.frag", .5));
+  gl_handler_->add_shader("default", new Shader("shaders/default.vert", "shaders/color_shader.frag", .5));
+  gl_handler_->add_shader("squiggly", new Shader("shaders/squiggly.vert", "shaders/default.frag", .5));
 
   ModelInstance *instance = new ModelInstance(
-    gl_handler_->get_model("suzanna"),
+    gl_handler_->get_model("smooth_suzanna"),
     gl_handler_->get_shader_id("squiggly"));
 
   instance->setPosition(glm::vec3(0, .5, 0));
@@ -39,6 +41,16 @@ void GameLoop::hacky_setup() {
   instance->setScale(glm::vec3(4, 4, 4));
 
   game_state_->add_model_instance("suzanne", instance);
+
+  instance = new ModelInstance(
+    gl_handler_->get_model("scene"),
+    gl_handler_->get_shader_id("default"));
+
+  instance->setPosition(glm::vec3(0, -6, 2));
+  instance->setRotation(glm::vec3(0, 1, 0), 180);
+  instance->setScale(glm::vec3(2,2,2));
+
+  game_state_->add_model_instance("scene", instance);
 
   instance = new ModelInstance(
     gl_handler_->get_model("cube"),
@@ -52,7 +64,7 @@ void GameLoop::hacky_setup() {
   for (int x = -10; x <= 10; x++) {
     for (int y = -10; y <= 10; y++) {
       instance = new ModelInstance(
-        gl_handler_->get_model("cube"),
+        gl_handler_->get_model("suzanna"),
         gl_handler_->get_shader_id("default"));
 
       instance->setPosition(glm::vec3(x, y, 5));
@@ -92,7 +104,7 @@ int GameLoop::run_game_loop() {
     game_state_->draw();
 
     SDL_GL_SwapWindow(window_);
-    SDL_Delay(1000.0f / FPS);
+    // SDL_Delay(1000.0f / FPS);
   }
   return 0;
 }
