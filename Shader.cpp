@@ -48,14 +48,14 @@ void Shader::set_params() {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture0_);
     GLfloat loc = glGetUniformLocation(program_id_, texture0_name.c_str());
-    glUniform1f(loc, 0);
+    glUniform1i(loc, 0);
   }
 
   if (texture1_) {
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture1_);
     GLfloat loc = glGetUniformLocation(program_id_, texture1_name.c_str());
-    glUniform1f(loc, 1);
+    glUniform1i(loc, 1);
   }
 }
 

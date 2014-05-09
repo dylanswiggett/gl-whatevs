@@ -42,7 +42,7 @@ void GameLoop::hacky_setup() {
   gl_handler_->add_shader("crazy_fb", fb_shad);
 
   Shader *post = new Shader("shaders/default_post.vert", "shaders/default_post.frag", 10);
-  post->setTexture0(fb_shad->get_depth_texture(), "rendered_tex");
+  post->setTexture0(fb_shad->get_rendered_texture(), "rendered_tex");
   post->setTexture1(fb_shad->get_depth_texture(), "depth_tex");
   gl_handler_->add_shader("post", post);
 

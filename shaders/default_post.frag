@@ -13,12 +13,15 @@ void main() {
 	float x = (float((int(uv.x * 1000)) / 10))/100;
 	float y = (float((int(uv.y * 1000)) / 10))/100;
 	float c = texture(depth_tex,uv).x;
+	// Agh
 	c = c * c;
 	c = c * c;
 	c = c * c;
 	c = c * c;
 	c = c * c;
 	c = c * c;
+	c = c * c;
+	c = 1 - c;
 	// if (c < 1)
 	// 	c = 0;
 	color = vec3(c,c,c);
