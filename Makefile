@@ -27,7 +27,7 @@ ModelInstance.o: ModelInstance.cpp ModelInstance.hpp
 Shader.o: Shader.cpp Shader.hpp shader_loader.hpp
 	$(CXX) $(FLAGS) -c -o Shader.o Shader.cpp
 
-FrameBufferShader.o: Shader.hpp FrameBufferShader.cpp FrameBufferShader.hpp
+FrameBufferShader.o: Shader.hpp FrameBufferShader.cpp FrameBufferShader.hpp Shader.o
 	$(CXX) $(FLAGS) -c -o FrameBufferShader.o FrameBufferShader.cpp
 
 Camera.o: Camera.cpp Camera.hpp

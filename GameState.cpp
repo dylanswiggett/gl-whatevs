@@ -3,6 +3,8 @@
 #include <map>
 #include <string>
 #include "glm/glm.hpp"
+#include "Shader.hpp"
+#include "FrameBufferShader.hpp"
 
 GameState::GameState(GLHandler *gl_handler) {
   model_instances_ = new std::map<int,ModelInstance *>();

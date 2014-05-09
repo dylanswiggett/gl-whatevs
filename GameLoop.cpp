@@ -30,13 +30,19 @@ void GameLoop::hacky_setup() {
   gl_handler_->add_model("smooth_suzanna", new Model("models/smooth_suzy.obj"));
   gl_handler_->add_model("cube", new Model("models/cube.obj"));
   gl_handler_->add_model("scene", new Model("models/hires_scene.obj"));
+  gl_handler_->add_model("plane", new Model("models/plane.obj"));
+
+  FrameBufferShader *fb_shad = new FrameBufferShader("shaders/squiggly.vert", "shaders/color_shader.frag", .5, 
+      gl_handler_->get_width(), gl_handler_->get_height());
 
   gl_handler_->add_shader("default", new Shader("shaders/default.vert", "shaders/default.frag", .5));
   gl_handler_->add_shader("squiggly", new Shader("shaders/squiggly.vert", "shaders/default.frag", .5));
   gl_handler_->add_shader("crazy", new Shader("shaders/squiggly.vert", "shaders/color_shader.frag", .5));
-  gl_handler_->add_shader("crazy_fb",
-    new FrameBufferShader("shaders/squiggly.vert", "shaders/color_shader.frag", .5, 
-      gl_handler_->get_width(), gl_handler_->get_height()));
+  gl_handler_->add_shader("crazy_fb", fb_shad);
+
+  Shader *post = new Shader("shaders/default_post.vert", "shaders/default_post.frag", 10);
+  post->setTexture0(fb_shad->get_rendered_texture(), "rendered_tex");
+  gl_handler_->add_shader("post", post);
 
   ModelInstance *instance = new ModelInstance(
     gl_handler_->get_model("smooth_suzanna"),
@@ -49,6 +55,15 @@ void GameLoop::hacky_setup() {
   game_state_->add_model_instance("suzanne", instance);
 
   instance = new ModelInstance(
+    gl_handler_->get_model("plane"),
+    gl_handler_->get_shader_id("post"));
+
+  instance->setPosition(glm::vec3(0,0,0));
+  instance->setScale(glm::vec3(.5,.5,.5));
+
+  game_state_->add_model_instance("render_plane", instance);
+
+  instance = new ModelInstance(
     gl_handler_->get_model("scene"),
     gl_handler_->get_shader_id("crazy_fb"));
 
@@ -59,7 +74,7 @@ void GameLoop::hacky_setup() {
   game_state_->add_model_instance("scene", instance);
 
   instance = new ModelInstance(
-    gl_handler_->get_model("cube"),
+    gl_handler_->get_model("plane"),
     gl_handler_->get_shader_id("squiggly"));
 
   instance->setPosition(glm::vec3(0, -3, 0));

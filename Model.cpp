@@ -74,6 +74,7 @@ Model::Model(std::string filepath) :
         sscanf(terms[1].c_str(), "%i//%i", &p1, &n1);
         sscanf(terms[2].c_str(), "%i//%i", &p2, &n2);
         sscanf(terms[3].c_str(), "%i//%i", &p3, &n3);
+        t1 = t2 = t3 = 1000000;  // MMM BIG NUMBER
       }
 
       p1 = p1 < 0 ? -p1 : p1;

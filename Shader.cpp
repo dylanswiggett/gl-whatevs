@@ -7,20 +7,54 @@
 #include "shader_loader.hpp"
 #include <string>
 #include "GL/gl.h"
+#include <vector>
 #include <iostream>
 
 Shader::Shader(std::string vertexPath, std::string fragPath, double priority) :
-  priority_(priority)
+  priority_(priority),
+  texture0_(0)
 {
   program_id_ = LoadShaders(vertexPath.c_str(), fragPath.c_str());
+  int_parameters_ = new std::vector<shader_intParam>;
+  float_parameters_ = new std::vector<shader_floatParam>;
 }
 
 Shader::~Shader() {
   glDeleteProgram(program_id_);
 }
 
+void Shader::addInputParami(std::string paramName, int param) {
+  shader_intParam newParam {paramName, param};
+  int_parameters_->push_back(newParam);
+}
+
+void Shader::addInputParamf(std::string paramName, float param) {
+  shader_floatParam newParam {paramName, param};
+  float_parameters_->push_back(newParam);
+}
+
+void Shader::set_params() {
+  for (auto int_param : *int_parameters_) {
+    GLuint loc = glGetUniformLocation(program_id_, int_param.name.c_str());
+    glUniform1i(loc, int_param.value);
+  }
+
+  for (auto float_param : *float_parameters_) {
+    GLfloat loc = glGetUniformLocation(program_id_, float_param.name.c_str());
+    glUniform1f(loc, float_param.value);
+  }
+
+  if (texture0_) {
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture0_);
+    GLfloat loc = glGetUniformLocation(program_id_, texture0_name.c_str());
+    glUniform1f(loc, 0);
+  }
+}
+
 void Shader::draw(ModelInstance **model_instances, int num_instances, const Camera *camera) {
   glUseProgram(program_id_);
+  set_params();
 
   GLuint modelMatId = glGetUniformLocation(program_id_, SHADER_MODEL_MATRIX_NAME);
   GLuint cameraMatId = glGetUniformLocation(program_id_, SHADER_CAMERA_MATRIX_NAME);

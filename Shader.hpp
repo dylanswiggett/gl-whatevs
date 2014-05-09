@@ -5,24 +5,45 @@
 #include "Model.hpp"
 #include "Camera.hpp"
 #include <string>
+#include <vector>
 #include "GL/gl.h"
 
 #define SHADER_MODEL_MATRIX_NAME "modelMat"
 #define SHADER_CAMERA_MATRIX_NAME "cameraMat"
 #define SHADER_PROJECTION_MATRIX_NAME "projMat"
 
+typedef struct {
+  std::string name;
+  int value;
+} shader_intParam;
+
+typedef struct {
+  std::string name;
+  float value;
+} shader_floatParam;
+
 class Shader {
  public:
   Shader(std::string vertexPath, std::string fragPath, double priority);
-  ~Shader();
+  virtual ~Shader();
 
-  void draw(ModelInstance **model_instances, int num_instances, const Camera *camera);
+  void addInputParami(std::string paramName, int param);
+  void addInputParamf(std::string paramName, float param);
+
+  void setTexture0(GLuint texture0, std::string name) { texture0_ = texture0; texture0_name = name; };
+
+  virtual void draw(ModelInstance **model_instances, int num_instances, const Camera *camera);
 
   double getPriority();
  protected:
   double p_id() { return program_id_; };
+  void set_params();
  private:
   double priority_;
+  GLuint texture0_;
+  std::string texture0_name;
+  std::vector<shader_intParam> *int_parameters_;
+  std::vector<shader_floatParam> *float_parameters_;
   GLuint program_id_;
 };
 

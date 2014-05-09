@@ -7,9 +7,12 @@ layout(location = 2) in vec3 vertexNormal;
 uniform mat4 cameraMat, projMat, modelMat;
 
 out vec3 normal;
+out vec2 uv;
+
+uniform sampler2D rendered_tex;
 
 void main() {
-	vec4 world_pos = modelMat * vec4(vertexPosition_modelspace, 1);
-	gl_Position = projMat * cameraMat * world_pos;
-	normal = normalize((modelMat * vec4(vertexNormal + vertexPosition_modelspace, 1) - world_pos).xyz);
+	gl_Position = vec4(vertexPosition_modelspace,1);
+	uv = (vertexPosition_modelspace.xy + vec2(1,1)) / 2;
+	normal = vertexPosition_modelspace;
 }
