@@ -10,6 +10,8 @@ out vec3 normal;
 out vec2 uv;
 
 uniform sampler2D rendered_tex;
+uniform sampler2D depth_tex;
+
 
 void main() {
 	gl_Position = vec4(vertexPosition_modelspace,1);

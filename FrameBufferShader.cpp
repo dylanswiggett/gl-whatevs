@@ -20,6 +20,7 @@ FrameBufferShader::FrameBufferShader(std::string vertexPath, std::string fragPat
   Shader(vertexPath, fragPath, priority),
   frame_buffer_(sharedBuffer.frame_buffer_),
   rendered_texture_(sharedBuffer.rendered_texture_),
+  depth_texture_(sharedBuffer.depth_texture_),
   buffer_shared_(true),
   depth_buffer_(sharedBuffer.depth_buffer_),
   w_(sharedBuffer.w_),
@@ -42,6 +43,8 @@ void FrameBufferShader::setup_fb() {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
 
+  glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, rendered_texture_, 0);
+  
   // Create the texture
   glGenTextures(1, &depth_texture_);
   glBindTexture(GL_TEXTURE_2D, depth_texture_);
@@ -52,11 +55,6 @@ void FrameBufferShader::setup_fb() {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   
-  // glGenRenderbuffers(1, &depth_buffer_);
-  // glBindRenderbuffer(GL_RENDERBUFFER, depth_buffer_);
-  // glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, w_, h_);
-  // glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth_buffer_); 
-  glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, rendered_texture_, 0);
   glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depth_texture_, 0);
 
 
@@ -75,12 +73,12 @@ FrameBufferShader::~FrameBufferShader() {
     glDeleteBuffers(1, &frame_buffer_);
     glDeleteTextures(1, &rendered_texture_);
     glDeleteRenderbuffers(1, &depth_buffer_);
+    glDeleteTextures(1, &depth_texture_);
   }
 }
 
 void FrameBufferShader::draw(ModelInstance **model_instances, int num_instances, const Camera *camera) {
   glUseProgram(Shader::p_id());
-  Shader::set_params();
 
   GLuint modelMatId = glGetUniformLocation(Shader::p_id(), SHADER_MODEL_MATRIX_NAME);
   GLuint cameraMatId = glGetUniformLocation(Shader::p_id(), SHADER_CAMERA_MATRIX_NAME);
@@ -91,6 +89,8 @@ void FrameBufferShader::draw(ModelInstance **model_instances, int num_instances,
 
   glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer_);
   glViewport(0, 0, w_, h_);
+
+  Shader::set_params();
 
   if (!buffer_shared_)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

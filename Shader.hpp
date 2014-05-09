@@ -31,7 +31,7 @@ class Shader {
   void addInputParamf(std::string paramName, float param);
 
   void setTexture0(GLuint texture0, std::string name) { texture0_ = texture0; texture0_name = name; };
-  void setTexture1(GLuint texture0, std::string name) { texture0_ = texture0; texture0_name = name; };
+  void setTexture1(GLuint texture1, std::string name) { texture1_ = texture1; texture1_name = name; };
 
   virtual void draw(ModelInstance **model_instances, int num_instances, const Camera *camera);
 

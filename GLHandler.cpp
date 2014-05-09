@@ -22,6 +22,7 @@ GLHandler::GLHandler(int width, int height) :
   glBindVertexArray(vertex_array_id_);
 
   glEnable(GL_DEPTH_TEST);
+  glEnable(GL_TEXTURE_2D);
   glDepthFunc(GL_LESS);
   
 }

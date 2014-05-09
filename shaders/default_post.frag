@@ -12,7 +12,16 @@ void main() {
 	// float c = dot(normal, vec3(0, sqrt(.5), -sqrt(.5))) * .4 + .2;
 	float x = (float((int(uv.x * 1000)) / 10))/100;
 	float y = (float((int(uv.y * 1000)) / 10))/100;
-	color = texture(rendered_tex, uv).rgb;
+	float c = texture(depth_tex,uv).x;
+	c = c * c;
+	c = c * c;
+	c = c * c;
+	c = c * c;
+	c = c * c;
+	c = c * c;
+	// if (c < 1)
+	// 	c = 0;
+	color = vec3(c,c,c);
 	// color = vec3(c,c,c);
 	// color = texture(rendered_tex, vec2(x,y)).rgb;
 	// color = vec3(0,0,0);
