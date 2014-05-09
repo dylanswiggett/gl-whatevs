@@ -32,21 +32,23 @@ void GameLoop::hacky_setup() {
   gl_handler_->add_model("scene", new Model("models/hires_scene.obj"));
   gl_handler_->add_model("plane", new Model("models/plane.obj"));
 
-  FrameBufferShader *fb_shad = new FrameBufferShader("shaders/squiggly.vert", "shaders/color_shader.frag", .5, 
+  FrameBufferShader *fb_shad = new FrameBufferShader("shaders/squiggly.vert", "shaders/color_shader.frag", 0, 
       gl_handler_->get_width(), gl_handler_->get_height());
 
   gl_handler_->add_shader("default", new Shader("shaders/default.vert", "shaders/default.frag", .5));
+  gl_handler_->add_shader("default_fb", new FrameBufferShader("shaders/default.vert", "shaders/default.frag", .1, *fb_shad));
   gl_handler_->add_shader("squiggly", new Shader("shaders/squiggly.vert", "shaders/default.frag", .5));
   gl_handler_->add_shader("crazy", new Shader("shaders/squiggly.vert", "shaders/color_shader.frag", .5));
   gl_handler_->add_shader("crazy_fb", fb_shad);
 
   Shader *post = new Shader("shaders/default_post.vert", "shaders/default_post.frag", 10);
   post->setTexture0(fb_shad->get_rendered_texture(), "rendered_tex");
+  // post->setTexture1(fb_shad->get_depth_texture(), "depth_tex");
   gl_handler_->add_shader("post", post);
 
   ModelInstance *instance = new ModelInstance(
     gl_handler_->get_model("smooth_suzanna"),
-    gl_handler_->get_shader_id("squiggly"));
+    gl_handler_->get_shader_id("default_fb"));
 
   instance->setPosition(glm::vec3(0, .5, 0));
   instance->setRotation(glm::vec3(0, 1, 0), 200);
@@ -101,7 +103,7 @@ int GameLoop::run_game_loop() {
 
   hacky_setup(); // :(
 
-  float rot = 0;
+  float rot = 1000;
 
   while (game_running_) {
     /*

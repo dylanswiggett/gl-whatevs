@@ -26,6 +26,7 @@ FrameBufferShader::FrameBufferShader(std::string vertexPath, std::string fragPat
   h_(sharedBuffer.h_)
 {
   draw_buffers_[0] = sharedBuffer.draw_buffers_[0];
+  draw_buffers_[1] = sharedBuffer.draw_buffers_[1];
 }
 
 void FrameBufferShader::setup_fb() {
@@ -40,16 +41,28 @@ void FrameBufferShader::setup_fb() {
 
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
-  
-  glGenRenderbuffers(1, &depth_buffer_);
-  glBindRenderbuffer(GL_RENDERBUFFER, depth_buffer_);
-  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, w_, h_);
-  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth_buffer_); 
 
+  // Create the texture
+  glGenTextures(1, &depth_texture_);
+  glBindTexture(GL_TEXTURE_2D, depth_texture_);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, w_, h_, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  
+  // glGenRenderbuffers(1, &depth_buffer_);
+  // glBindRenderbuffer(GL_RENDERBUFFER, depth_buffer_);
+  // glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, w_, h_);
+  // glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth_buffer_); 
   glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, rendered_texture_, 0);
+  glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depth_texture_, 0);
+
 
   draw_buffers_[0] = GL_COLOR_ATTACHMENT0;
-  glDrawBuffers(1, draw_buffers_);
+  draw_buffers_[1] = GL_DEPTH_ATTACHMENT;
+  glDrawBuffers(2, draw_buffers_);
 
   if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     std::cout << "Failed to create frame buffer." << std::endl;
@@ -79,7 +92,8 @@ void FrameBufferShader::draw(ModelInstance **model_instances, int num_instances,
   glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer_);
   glViewport(0, 0, w_, h_);
 
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  if (!buffer_shared_)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // std::cout << "Setup fb." << std::endl;
 

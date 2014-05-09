@@ -15,6 +15,7 @@ class FrameBufferShader : public Shader {
   ~FrameBufferShader();
 
   GLuint get_rendered_texture() { return rendered_texture_; };
+  GLuint get_depth_texture() { return depth_texture_; };
 
   void draw(ModelInstance **model_instances, int num_instances, const Camera *camera) override;
 
@@ -22,10 +23,10 @@ class FrameBufferShader : public Shader {
   void setup_fb();
 
   GLuint frame_buffer_;
-  GLuint rendered_texture_;
+  GLuint rendered_texture_, depth_texture_;
   bool buffer_shared_;
   GLuint depth_buffer_;
-  GLenum draw_buffers_[1];
+  GLenum draw_buffers_[2];
   int w_, h_;
 };
 
