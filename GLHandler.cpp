@@ -36,7 +36,7 @@ GLHandler::~GLHandler() {
   delete model_ids_;
 
   std::map<int,GraphicsPipelineItem *>::iterator graphicsIt;
-  for (graphicsIt = graphics_items_->begin(); graphicsIt != shaders_->end(); ++graphicsIt) {
+  for (graphicsIt = graphics_items_->begin(); graphicsIt != graphics_items_->end(); ++graphicsIt) {
     delete graphicsIt->second;
   }
   delete graphics_items_;
@@ -73,7 +73,7 @@ int GLHandler::get_graphics_item_id(const std::string name) const {
   return graphics_item_ids_->find(name)->second;
 }
 
-Shader *GLHandler::get_graphics_item(const int id) const {
+GraphicsPipelineItem *GLHandler::get_graphics_item(const int id) const {
   return graphics_items_->find(id)->second;
 }
 

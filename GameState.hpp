@@ -29,6 +29,8 @@ class GameState {
   ModelInstance *get_model_instance(int id);
   int get_model_instance_id(std::string name);
 
+  const Camera * const get_camera() const { return current_camera_; }
+
   void step();
   void draw();
  private:

@@ -25,7 +25,7 @@ typedef struct {
 
 class Shader : public GraphicsPipelineItem {
  public:
-  Shader(std::string vertexPath, std::string fragPath, double priority, Camera *activeCamera);
+  Shader(std::string vertexPath, std::string fragPath, double priority, const Camera * const activeCamera);
   virtual ~Shader();
 
   void addInputParami(std::string paramName, int param);
@@ -47,7 +47,7 @@ class Shader : public GraphicsPipelineItem {
   std::vector<shader_intParam> *int_parameters_;
   std::vector<shader_floatParam> *float_parameters_;
   GLuint program_id_;
-  Camera *active_camera_;
+  const Camera * const active_camera_;
 };
 
 #endif  // _SHADER_HPP_

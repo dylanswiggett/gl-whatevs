@@ -10,7 +10,7 @@
 #include <vector>
 #include <iostream>
 
-Shader::Shader(std::string vertexPath, std::string fragPath, double priority, Camera *activeCamera) :
+Shader::Shader(std::string vertexPath, std::string fragPath, double priority, const Camera * const activeCamera) :
   priority_(priority),
   texture0_(0), texture1_(0),
   active_camera_(activeCamera)
@@ -68,8 +68,8 @@ void Shader::act(ModelInstance **model_instances, int num_instances) {
   GLuint cameraMatId = glGetUniformLocation(program_id_, SHADER_CAMERA_MATRIX_NAME);
   GLuint projectionMatId = glGetUniformLocation(program_id_, SHADER_PROJECTION_MATRIX_NAME);
 
-  glUniformMatrix4fv(cameraMatId, 1, GL_FALSE, &(camera->getCamMatrix())[0][0]);
-  glUniformMatrix4fv(projectionMatId, 1, GL_FALSE, &(camera->getProjMatrix())[0][0]);
+  glUniformMatrix4fv(cameraMatId, 1, GL_FALSE, &(active_camera_->getCamMatrix())[0][0]);
+  glUniformMatrix4fv(projectionMatId, 1, GL_FALSE, &(active_camera_->getProjMatrix())[0][0]);
 
   for (int i = 0; i < num_instances; i++) {
     ModelInstance *model_instance = model_instances[i];

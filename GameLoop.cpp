@@ -32,53 +32,53 @@ void GameLoop::hacky_setup() {
   gl_handler_->add_model("scene", new Model("models/hires_scene.obj"));
   gl_handler_->add_model("plane", new Model("models/plane.obj"));
 
-  FrameBufferShader *fb_shad = new FrameBufferShader("shaders/squiggly.vert", "shaders/color_shader.frag", 0, 
-      gl_handler_->get_width(), gl_handler_->get_height());
+  // FrameBufferShader *fb_shad = new FrameBufferShader("shaders/squiggly.vert", "shaders/color_shader.frag", 0, 
+  //     gl_handler_->get_width(), gl_handler_->get_height());
 
-  gl_handler_->add_shader("default", new Shader("shaders/default.vert", "shaders/default.frag", .5));
-  gl_handler_->add_shader("default_fb", new FrameBufferShader("shaders/default.vert", "shaders/default.frag", .1, *fb_shad));
-  gl_handler_->add_shader("squiggly", new Shader("shaders/squiggly.vert", "shaders/default.frag", .5));
-  gl_handler_->add_shader("squiggly_fb", new FrameBufferShader("shaders/squiggly.vert", "shaders/default.frag", .2, *fb_shad));
-  gl_handler_->add_shader("crazy", new Shader("shaders/squiggly.vert", "shaders/color_shader.frag", .5));
-  gl_handler_->add_shader("crazy_fb", fb_shad);
+  gl_handler_->add_graphics_item("default", new Shader("shaders/default.vert", "shaders/default.frag", .5, game_state_->get_camera()));
+  // gl_handler_->add_graphics_item("default_fb", new FrameBufferShader("shaders/default.vert", "shaders/default.frag", .1, *fb_shad));
+  gl_handler_->add_graphics_item("squiggly", new Shader("shaders/squiggly.vert", "shaders/default.frag", .5, game_state_->get_camera()));
+  // gl_handler_->add_graphics_item("squiggly_fb", new FrameBufferShader("shaders/squiggly.vert", "shaders/default.frag", .2, *fb_shad));
+  gl_handler_->add_graphics_item("crazy", new Shader("shaders/squiggly.vert", "shaders/color_shader.frag", .5, game_state_->get_camera()));
+  // gl_handler_->add_graphics_item("crazy_fb", fb_shad);
 
-  Shader *post = new Shader("shaders/default_post.vert", "shaders/default_post.frag", 10);
-  post->setTexture0(fb_shad->get_rendered_texture(), "rendered_tex");
-  post->setTexture1(fb_shad->get_depth_texture(), "depth_tex");
-  gl_handler_->add_shader("post", post);
+  Shader *post = new Shader("shaders/default_post.vert", "shaders/default_post.frag", 10, game_state_->get_camera());
+  // post->setTexture0(fb_shad->get_rendered_texture(), "rendered_tex");
+  // post->setTexture1(fb_shad->get_depth_texture(), "depth_tex");
+  gl_handler_->add_graphics_item("post", post);
 
   ModelInstance *instance = new ModelInstance(
     gl_handler_->get_model("smooth_suzanna"),
-    gl_handler_->get_shader_id("squiggly_fb"));
+    gl_handler_->get_graphics_item_id("squiggly_fb"));
 
   instance->setPosition(glm::vec3(0, .5, 0));
   instance->setRotation(glm::vec3(0, 1, 0), 200);
   instance->setScale(glm::vec3(4, 4, 4));
 
-  game_state_->add_model_instance("suzanne", instance);
+  // game_state_->add_model_instance("suzanne", instance);
 
   instance = new ModelInstance(
     gl_handler_->get_model("plane"),
-    gl_handler_->get_shader_id("post"));
+    gl_handler_->get_graphics_item_id("post"));
 
   instance->setPosition(glm::vec3(0,0,0));
   instance->setScale(glm::vec3(.5,.5,.5));
 
-  game_state_->add_model_instance("render_plane", instance);
+  // game_state_->add_model_instance("render_plane", instance);
 
   instance = new ModelInstance(
     gl_handler_->get_model("scene"),
-    gl_handler_->get_shader_id("crazy_fb"));
+    gl_handler_->get_graphics_item_id("crazy_fb"));
 
   instance->setPosition(glm::vec3(0, -6, 2));
   instance->setRotation(glm::vec3(0, 1, 0), 60);
   instance->setScale(glm::vec3(2,2,2));
 
-  game_state_->add_model_instance("scene", instance);
+  // game_state_->add_model_instance("scene", instance);
 
   instance = new ModelInstance(
     gl_handler_->get_model("plane"),
-    gl_handler_->get_shader_id("squiggly"));
+    gl_handler_->get_graphics_item_id("squiggly"));
 
   instance->setPosition(glm::vec3(0, -3, 0));
   instance->setScale(glm::vec3(.5, .5, .5));
@@ -89,7 +89,7 @@ void GameLoop::hacky_setup() {
   //   for (int y = -10; y <= 10; y++) {
   //     instance = new ModelInstance(
   //       gl_handler_->get_model("suzanna"),
-  //       gl_handler_->get_shader_id("default"));
+  //       gl_handler_->get_graphics_item_id("default"));
 
   //     instance->setPosition(glm::vec3(x, y, 5));
   //     instance->setScale(glm::vec3(.2, .2, .2));
@@ -117,10 +117,10 @@ int GameLoop::run_game_loop() {
       }
     }
 
-    game_state_->get_model_instance(game_state_->get_model_instance_id("suzanne"))->setRotation(glm::vec3(0, 1, 0), rot);
-    game_state_->get_model_instance(game_state_->get_model_instance_id("scene"))->setRotation(glm::vec3(0, 1, 0), rot * .1);
+    // game_state_->get_model_instance(game_state_->get_model_instance_id("suzanne"))->setRotation(glm::vec3(0, 1, 0), rot);
+    // game_state_->get_model_instance(game_state_->get_model_instance_id("scene"))->setRotation(glm::vec3(0, 1, 0), rot * .1);
     game_state_->get_model_instance(game_state_->get_model_instance_id("cube"))->setRotation(glm::vec3(1, 1, 0), -rot);
-    rot += .4;
+    rot += .01;
 
     game_state_->step();
 

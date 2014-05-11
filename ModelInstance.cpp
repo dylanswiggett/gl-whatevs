@@ -1,5 +1,7 @@
 #include "ModelInstance.hpp"
 
+#define GLM_FORCE_RADIANS
+
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include <vector>
@@ -18,7 +20,7 @@ ModelInstance::ModelInstance(Model *model) :
   rot_amount_ (DEFAULT_ROTA)
 {
   model_ = model;
-  shader_ids_ = new std::vector<ShaderInstance>();
+  graphics_ids_ = new std::vector<GraphicsInstance>();
   build_matrix();
 }
 
@@ -29,26 +31,26 @@ ModelInstance::ModelInstance(Model *model, int shaderId) :
   rot_amount_ (DEFAULT_ROTA)
 {
   model_ = model;
-  shader_ids_ = new std::vector<ShaderInstance>();
-  add_shader(shaderId);
+  graphics_ids_ = new std::vector<GraphicsInstance>();
+  add_graphics_item(shaderId);
   build_matrix();
 }
 
 ModelInstance::~ModelInstance() {
-  delete shader_ids_;
+  delete graphics_ids_;
 }
 
-void ModelInstance::setPosition(glm::vec3 newPos) {
+void ModelInstance::setPosition(vec3 newPos) {
   pos_ = newPos;
   build_matrix();
 }
 
-void ModelInstance::setScale(glm::vec3 newScale) {
+void ModelInstance::setScale(vec3 newScale) {
   scale_ = newScale;
   build_matrix();
 }
 
-void ModelInstance::setRotation(glm::vec3 rotAxis, float rotAmount) {
+void ModelInstance::setRotation(vec3 rotAxis, float rotAmount) {
   rot_ = rotAxis;
   rot_amount_ = rotAmount;
   build_matrix();
@@ -71,7 +73,7 @@ const glm::mat4 ModelInstance::getModelMatrix() const {
 }
 
 void ModelInstance::add_graphics_item(int graphics_item_id) {
-  GraphicsInstance newItem = {shader_id, true};
+  GraphicsInstance newItem = {graphics_item_id, true};
   graphics_ids_->push_back(newItem);
 }
 
@@ -82,7 +84,7 @@ void ModelInstance::enable_graphics_item(int graphics_item_id) {
   }
 }
 
-void ModelInstance::disable_shader(int graphics_item_id) {
+void ModelInstance::disable_graphics_item(int graphics_item_id) {
   for (auto graphics_item : *graphics_ids_) {
     if (graphics_item.item_id == graphics_item_id)
       graphics_item.enabled = false;

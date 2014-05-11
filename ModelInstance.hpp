@@ -33,8 +33,8 @@ class ModelInstance {
   void build_matrix();
 
   glm::vec3 pos_, scale_, rot_;
-  glm::mat4 matrix_;
   float rot_amount_;
+  glm::mat4 matrix_;
   Model *model_;
   std::vector<GraphicsInstance> *graphics_ids_;
 };
