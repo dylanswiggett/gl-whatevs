@@ -12,7 +12,8 @@ void main() {
 	// float c = dot(normal, vec3(0, sqrt(.5), -sqrt(.5))) * .4 + .2;
 	// float x = (float((int(uv.x * 1000)) / 10))/100;
 	// float y = (float((int(uv.y * 1000)) / 10))/100;
-	float c = texture(depth_tex,uv).x;
+	float depth = texture(depth_tex,uv).x;
+	float c = depth;
 	// // Agh
 	c = c * c;
 	c = c * c;
@@ -25,6 +26,10 @@ void main() {
 	c = c * c;
 	c = c * c;
 	c = c * c;
+	if (c == 1)
+		c = .1;
+	else
+		c -= .1;
 	// c = 1 - c;
 	// // if (c < 1)
 	// // 	c = 0;
@@ -35,11 +40,18 @@ void main() {
 	// c = c * .1;
 
 	int amt = 4;
+	int num_samples = 0;
 
-	float diff = c * .005;
+	float diff = c * .01;
 	for (int i = -amt; i <= amt; i++) {
 		for (int j = -amt; j <= amt; j++) {
-			color += texture(rendered_tex, vec2(clamp(uv.x + diff * i,0,.9999),clamp(uv.y + diff * j,0,.9999))).rgb;
+			float x = clamp(uv.x + diff * i,0,.9999);
+			float y = clamp(uv.y + diff * j,0,.9999);
+			float depth_at_sample = texture(depth_tex,vec2(x,y)).x;
+			if (depth_at_sample - depth < .00005) {
+				color += texture(rendered_tex, vec2(x,y)).rgb;
+				num_samples++;
+			}
 		}
 	}
 	// while (x < uv.x + diff) {
@@ -51,6 +63,6 @@ void main() {
 	// 	x += diff;
 	// }
 	// // color = (texture(rendered_tex, uv).rgb + texture(rendered_tex, clamp(uv + vec2(.01,.01), 0.0, .9999)).rgb) / 2;
-	color = color / ((amt*2+1)*(amt*2+1));
+	color = color / num_samples;
 	// color = texture(rendered_tex, uv).rgb;
 }

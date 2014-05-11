@@ -38,6 +38,7 @@ void GameLoop::hacky_setup() {
   gl_handler_->add_shader("default", new Shader("shaders/default.vert", "shaders/default.frag", .5));
   gl_handler_->add_shader("default_fb", new FrameBufferShader("shaders/default.vert", "shaders/default.frag", .1, *fb_shad));
   gl_handler_->add_shader("squiggly", new Shader("shaders/squiggly.vert", "shaders/default.frag", .5));
+  gl_handler_->add_shader("squiggly_fb", new FrameBufferShader("shaders/squiggly.vert", "shaders/default.frag", .2, *fb_shad));
   gl_handler_->add_shader("crazy", new Shader("shaders/squiggly.vert", "shaders/color_shader.frag", .5));
   gl_handler_->add_shader("crazy_fb", fb_shad);
 
@@ -48,7 +49,7 @@ void GameLoop::hacky_setup() {
 
   ModelInstance *instance = new ModelInstance(
     gl_handler_->get_model("smooth_suzanna"),
-    gl_handler_->get_shader_id("default_fb"));
+    gl_handler_->get_shader_id("squiggly_fb"));
 
   instance->setPosition(glm::vec3(0, .5, 0));
   instance->setRotation(glm::vec3(0, 1, 0), 200);
