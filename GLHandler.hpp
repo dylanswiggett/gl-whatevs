@@ -21,6 +21,7 @@ class GLHandler {
   int get_model_id(const std::string name) const;
   Model *get_model(const std::string name) const;
   Model *get_model(const int id) const;
+  // TODO: make the get methods throw exceptions at unfound items.
   int add_graphics_item(const std::string name, GraphicsPipelineItem *graphics_item);
   int get_graphics_item_id(const std::string name) const;
   GraphicsPipelineItem *get_graphics_item(const int id) const;

@@ -26,8 +26,11 @@ class GameState {
   void set_camera(Camera *newCamera);
   int add_model_instance(std::string name, ModelInstance *newInstance);
 
+  // TODO: make the get methods throw exceptions at unfound items.
   ModelInstance *get_model_instance(int id);
   int get_model_instance_id(std::string name);
+
+  void add_graphics_step(int id);
 
   const Camera * const get_camera() const { return current_camera_; }
 

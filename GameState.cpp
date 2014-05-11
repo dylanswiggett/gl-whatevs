@@ -4,7 +4,8 @@
 #include <string>
 #include "glm/glm.hpp"
 #include "Shader.hpp"
-#include "FrameBufferShader.hpp"
+#include "FramebufferBinder.hpp"
+#include "GraphicsPipelineItem.hpp"
 
 GameState::GameState(GLHandler *gl_handler) {
   model_instances_ = new std::map<int,ModelInstance *>();
@@ -35,6 +36,10 @@ GameState::~GameState() {
 
 void GameState::set_camera(Camera *newCamera) {
   current_camera_ = newCamera;
+}
+
+void GameState::add_graphics_step(int id) {
+  get_graphics_instance(id);
 }
 
 GraphicsPipelineGroup *GameState::get_graphics_instance(int id) {
