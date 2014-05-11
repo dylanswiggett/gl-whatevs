@@ -77,7 +77,7 @@ FrameBufferShader::~FrameBufferShader() {
   }
 }
 
-void FrameBufferShader::draw(ModelInstance **model_instances, int num_instances, const Camera *camera) {
+void FrameBufferShader::act(ModelInstance **model_instances, int num_instances) {
   glUseProgram(Shader::p_id());
 
   GLuint modelMatId = glGetUniformLocation(Shader::p_id(), SHADER_MODEL_MATRIX_NAME);

@@ -7,9 +7,9 @@
 #include "Model.hpp"
 
 typedef struct {
-  int shader_id;
+  int item_id;
   bool enabled;
-} ShaderInstance;
+} GraphicsInstance;
 
 class ModelInstance {
  public:
@@ -22,11 +22,11 @@ class ModelInstance {
   void setRotation(glm::vec3 rotAxis, float rotAmount);
 
   Model *get_model();
-  const std::vector<ShaderInstance> *get_shader_ids();
+  const std::vector<GraphicsInstance> *get_graphics_ids();
 
-  void add_shader(int shader_id);
-  void enable_shader(int shader_id);
-  void disable_shader(int shader_id);
+  void add_graphics_item(int item_id);
+  void enable_graphics_item(int item_id);
+  void disable_graphics_item(int item_id);
 
   const glm::mat4 getModelMatrix() const;
  private:
@@ -36,7 +36,7 @@ class ModelInstance {
   glm::mat4 matrix_;
   float rot_amount_;
   Model *model_;
-  std::vector<ShaderInstance> *shader_ids_;
+  std::vector<GraphicsInstance> *graphics_ids_;
 };
 
 #endif  // _MODEL_INSTANCE_HPP_

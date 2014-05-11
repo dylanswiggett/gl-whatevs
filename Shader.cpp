@@ -10,9 +10,10 @@
 #include <vector>
 #include <iostream>
 
-Shader::Shader(std::string vertexPath, std::string fragPath, double priority) :
+Shader::Shader(std::string vertexPath, std::string fragPath, double priority, Camera *activeCamera) :
   priority_(priority),
-  texture0_(0), texture1_(0)
+  texture0_(0), texture1_(0),
+  active_camera_(activeCamera)
 {
   program_id_ = LoadShaders(vertexPath.c_str(), fragPath.c_str());
   int_parameters_ = new std::vector<shader_intParam>;
@@ -59,7 +60,7 @@ void Shader::set_params() {
   }
 }
 
-void Shader::draw(ModelInstance **model_instances, int num_instances, const Camera *camera) {
+void Shader::act(ModelInstance **model_instances, int num_instances) {
   glUseProgram(program_id_);
   set_params();
 
@@ -87,8 +88,4 @@ void Shader::draw(ModelInstance **model_instances, int num_instances, const Came
   }
 
   glUseProgram(0);
-}
-
-double Shader::getPriority() {
-  return priority_;
 }

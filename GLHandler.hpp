@@ -21,9 +21,9 @@ class GLHandler {
   int get_model_id(const std::string name) const;
   Model *get_model(const std::string name) const;
   Model *get_model(const int id) const;
-  int add_shader(const std::string name, Shader *shader);
-  int get_shader_id(const std::string name) const;
-  Shader *get_shader(const int id) const;
+  int add_graphics_item(const std::string name, GraphicsPipelineItem *graphics_item);
+  int get_graphics_item_id(const std::string name) const;
+  GraphicsPipelineItem *get_graphics_item(const int id) const;
 
   int get_width() const;
   int get_height() const;
@@ -35,8 +35,8 @@ class GLHandler {
   std::map<int,Model *> *models_;
   std::map<std::string,int> *model_ids_;
 
-  std::map<int,Shader *> *shaders_;
-  std::map<std::string,int> *shader_ids_;
+  std::map<int,GraphicsPipelineItem *> *graphics_items_;
+  std::map<std::string,int> *graphics_item_ids_;
 
   int width_, height_;
 };

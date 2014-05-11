@@ -17,7 +17,7 @@ class FrameBufferShader : public Shader {
   GLuint get_rendered_texture() { return rendered_texture_; };
   GLuint get_depth_texture() { return depth_texture_; };
 
-  void draw(ModelInstance **model_instances, int num_instances, const Camera *camera) override;
+  void act(ModelInstance **model_instances, int num_instances) override;
 
  private:
   void setup_fb();

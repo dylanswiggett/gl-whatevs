@@ -2,6 +2,7 @@
 #define _SHADER_HPP_
 
 #include "ModelInstance.hpp"
+#include "GraphicsPipelineItem.hpp"
 #include "Model.hpp"
 #include "Camera.hpp"
 #include <string>
@@ -22,20 +23,20 @@ typedef struct {
   float value;
 } shader_floatParam;
 
-class Shader {
+class Shader : public GraphicsPipelineItem {
  public:
-  Shader(std::string vertexPath, std::string fragPath, double priority);
+  Shader(std::string vertexPath, std::string fragPath, double priority, Camera *activeCamera);
   virtual ~Shader();
 
   void addInputParami(std::string paramName, int param);
   void addInputParamf(std::string paramName, float param);
 
-  void setTexture0(GLuint texture0, std::string name) { texture0_ = texture0; texture0_name = name; };
-  void setTexture1(GLuint texture1, std::string name) { texture1_ = texture1; texture1_name = name; };
+  void setTexture0(GLuint texture0, std::string name) { texture0_ = texture0; texture0_name = name; }
+  void setTexture1(GLuint texture1, std::string name) { texture1_ = texture1; texture1_name = name; }
 
-  virtual void draw(ModelInstance **model_instances, int num_instances, const Camera *camera);
+  virtual void act(ModelInstance **model_instances, int num_instances) override;
 
-  double getPriority();
+  double getPriority() override { return priority_; }
  protected:
   double p_id() { return program_id_; };
   void set_params();
@@ -46,6 +47,7 @@ class Shader {
   std::vector<shader_intParam> *int_parameters_;
   std::vector<shader_floatParam> *float_parameters_;
   GLuint program_id_;
+  Camera *active_camera_;
 };
 
 #endif  // _SHADER_HPP_

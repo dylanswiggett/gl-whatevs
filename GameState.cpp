@@ -37,25 +37,25 @@ void GameState::set_camera(Camera *newCamera) {
   current_camera_ = newCamera;
 }
 
-ShaderGroup *GameState::get_shader_instance(int id) {
-  Shader *shader = gl_handler_->get_shader(id);
+GraphicsPipelineGroup *GameState::get_graphics_instance(int id) {
+  GraphicsPipelineItem *graphics_item = gl_handler_->get_graphics_item(id);
   int pos = 0;
 
   if (draw_order_.size() > 0) {
     while (pos < (int) draw_order_.size() &&
-           shader->getPriority() > draw_order_[pos].shader->getPriority())
+           graphics_item->getPriority() > draw_order_[pos].item->getPriority())
       pos++;
 
-    if (pos < (int) draw_order_.size() && draw_order_[pos].shader_id == id)
+    if (pos < (int) draw_order_.size() && draw_order_[pos].item_id == id)
       return &(draw_order_[pos]);
   }
 
   // New shader
-  ShaderGroup newInstance;
-  newInstance.shader = shader;
-  newInstance.shader_id = id;
-  newInstance.shader_enabled = true;
-  draw_order_.insert(draw_order_.begin() + pos, newInstance);
+  GraphicsPipelineGroup newGroup;
+  newGroup.item = graphics_item;
+  newGroup.item_id = id;
+  newGroup.enabled = true;
+  draw_order_.insert(draw_order_.begin() + pos, newGroup);
 
   return &(draw_order_[pos]);
 }
@@ -65,9 +65,9 @@ int GameState::add_model_instance(std::string name, ModelInstance *newInstance) 
   model_instances_->insert(std::pair<int,ModelInstance *>(new_id, newInstance));
   model_instance_ids_->insert(std::pair<std::string,int>(name, new_id));
 
-  for (auto shader_instance : *(newInstance->get_shader_ids())) {
-    ShaderGroup *group = get_shader_instance(shader_instance.shader_id);
-    group->shaded_instances.push_back(newInstance);
+  for (auto graphics_item : *(newInstance->get_graphics_ids())) {
+    GraphicsPipelineGroup *group = get_graphics_instance(graphics_item.item_id);
+    group->used_instances.push_back(newInstance);
   }
 
   return new_id;
@@ -86,9 +86,9 @@ void GameState::step() {
 }
 
 void GameState::draw() {
-  for (auto shader_group : draw_order_) {
-    if (shader_group.shader_enabled)
-      shader_group.shader->draw(&(shader_group.shaded_instances[0]), 
-                                shader_group.shaded_instances.size(), current_camera_);
+  for (auto graphics_group : draw_order_) {
+    if (graphics_group.enabled)
+      graphics_group.item->act(&(graphics_group.used_instances[0]), 
+                                graphics_group.used_instances.size());
   }
 }

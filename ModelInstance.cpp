@@ -58,8 +58,8 @@ Model *ModelInstance::get_model() {
   return model_;
 }
 
-const std::vector<ShaderInstance> *ModelInstance::get_shader_ids() {
-  return shader_ids_;
+const std::vector<GraphicsInstance> *ModelInstance::get_graphics_ids() {
+  return graphics_ids_;
 }
 
 void ModelInstance::build_matrix() {
@@ -70,21 +70,21 @@ const glm::mat4 ModelInstance::getModelMatrix() const {
   return matrix_;
 }
 
-void ModelInstance::add_shader(int shader_id) {
-  ShaderInstance newShader = {shader_id, true};
-  shader_ids_->push_back(newShader);
+void ModelInstance::add_graphics_item(int graphics_item_id) {
+  GraphicsInstance newItem = {shader_id, true};
+  graphics_ids_->push_back(newItem);
 }
 
-void ModelInstance::enable_shader(int shader_id) {
-  for (auto shader_instance : *shader_ids_) {
-    if (shader_instance.shader_id == shader_id)
-      shader_instance.enabled = true;
+void ModelInstance::enable_graphics_item(int graphics_item_id) {
+  for (auto graphics_item : *graphics_ids_) {
+    if (graphics_item.item_id == graphics_item_id)
+      graphics_item.enabled = true;
   }
 }
 
-void ModelInstance::disable_shader(int shader_id) {
-  for (auto shader_instance : *shader_ids_) {
-    if (shader_instance.shader_id == shader_id)
-      shader_instance.enabled = false;
+void ModelInstance::disable_shader(int graphics_item_id) {
+  for (auto graphics_item : *graphics_ids_) {
+    if (graphics_item.item_id == graphics_item_id)
+      graphics_item.enabled = false;
   }
 }
