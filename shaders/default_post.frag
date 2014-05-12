@@ -47,11 +47,11 @@ void main() {
 		for (int j = -amt; j <= amt; j++) {
 			float x = clamp(uv.x + diff * i,0,.9999);
 			float y = clamp(uv.y + diff * j,0,.9999);
-			float depth_at_sample = texture(depth_tex,vec2(x,y)).x;
-			if (depth_at_sample - depth < .00005) {
+			// float depth_at_sample = texture(depth_tex,vec2(x,y)).x;
+			// if (depth_at_sample - depth < .00005) {
 				color += texture(rendered_tex, vec2(x,y)).rgb;
 				num_samples++;
-			}
+			// }
 		}
 	}
 	// while (x < uv.x + diff) {

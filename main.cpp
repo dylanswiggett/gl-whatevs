@@ -6,7 +6,7 @@
 
 #define SDL_FLAGS SDL_INIT_EVERYTHING
 #define SDL_OGL_FLAGS SDL_WINDOW_OPENGL
-#define SDL_WIDTH 1000
+#define SDL_WIDTH 1400
 #define SDL_HEIGHT 800
 
 using namespace std;
