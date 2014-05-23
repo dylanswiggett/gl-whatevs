@@ -37,6 +37,7 @@ void GameLoop::hacky_setup() {
   int h = gl_handler_->get_height();
 
   FramebufferBinder *fb = new FramebufferBinder(w, h, true, true);
+  FramebufferBinder *fb2 = new FramebufferBinder(w, h, true, false);
   FramebufferBinder *screen_buffer = new FramebufferBinder(w, h);
 
   // Build the graphics pipeline.
@@ -56,20 +57,22 @@ void GameLoop::hacky_setup() {
       new Shader("shaders/squiggly.vert", "shaders/color_shader.frag", game_state_->get_camera()));
   game_state_->add_graphics_step("crazy", .5);
 
+  gl_handler_->add_graphics_item("edge_buffer", fb2);
+  game_state_->add_graphics_step("edge_buffer", 5);
+
+  Shader *edge = new Shader("shaders/default_post.vert", "shaders/edge_detect.frag", game_state_->get_camera());
+  edge->setTexture0(fb->get_color_texture(), "rendered_tex");
+  gl_handler_->add_graphics_item("edge_renderer", edge);
+  game_state_->add_graphics_step("edge_renderer", 10);
+
   gl_handler_->add_graphics_item("default_buffer", screen_buffer);
-  game_state_->add_graphics_step("default_buffer", 5);
+  game_state_->add_graphics_step("default_buffer", 11);
 
-  // Shader *post = new Shader("shaders/default_post.vert", "shaders/default_post.frag", game_state_->get_camera());
-  // post->setTexture0(fb->get_color_texture(), "rendered_tex");
-  // post->setTexture1(fb->get_depth_texture(), "depth_tex");
-  // gl_handler_->add_graphics_item("post_renderer", post);
-  // game_state_->add_graphics_step("post_renderer", 10);
-
-  Shader *post = new Shader("shaders/default_post.vert", "shaders/edge_detect.frag", game_state_->get_camera());
-  post->setTexture0(fb->get_color_texture(), "rendered_tex");
+  Shader *post = new Shader("shaders/default_post.vert", "shaders/default_post.frag", game_state_->get_camera());
+  post->setTexture0(fb2->get_color_texture(), "rendered_tex");
   post->setTexture1(fb->get_depth_texture(), "depth_tex");
   gl_handler_->add_graphics_item("post_renderer", post);
-  game_state_->add_graphics_step("post_renderer", 10);
+  game_state_->add_graphics_step("post_renderer", 12);
 
   // Add models to the scene.
 
@@ -92,6 +95,15 @@ void GameLoop::hacky_setup() {
   instance->setScale(glm::vec3(2,2,2));
 
   game_state_->add_model_instance("scene", instance);
+
+  instance = new ModelInstance(
+    gl_handler_->get_model("plane"),
+    gl_handler_->get_graphics_item_id("edge_renderer"));
+
+  instance->setPosition(glm::vec3(0,0,0));
+  instance->setScale(glm::vec3(.5,.5,.5));
+
+  game_state_->add_model_instance("edge_render_plane", instance);
 
   // Final plane to draw to screen (everything rendered on this.)
 
