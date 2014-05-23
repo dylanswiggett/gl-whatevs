@@ -42,14 +42,20 @@ void GameState::add_graphics_step(std::string name, double priority) {
   get_graphics_instance(gl_handler_->get_graphics_item_id(name), priority);
 }
 
-GraphicsPipelineGroup *GameState::get_graphics_instance(int id, double priority) {
+GraphicsPipelineGroup *GameState::get_graphics_instance(int id, double priority, bool check_priority) {
   GraphicsPipelineItem *graphics_item = gl_handler_->get_graphics_item(id);
   int pos = 0;
 
   if (draw_order_.size() > 0) {
-    while (pos < (int) draw_order_.size() &&
-           priority > draw_order_[pos].priority)
-      pos++;
+    if (check_priority) {
+      while (pos < (int) draw_order_.size() &&
+             priority > draw_order_[pos].priority)
+        pos++;
+    } else {
+      while (pos < (int) draw_order_.size() &&
+             draw_order_[pos].item_id != id)
+        pos++;
+    }
 
     if (pos < (int) draw_order_.size() && draw_order_[pos].item_id == id)
       return &(draw_order_[pos]);
@@ -72,7 +78,7 @@ int GameState::add_model_instance(std::string name, ModelInstance *newInstance) 
   model_instance_ids_->insert(std::pair<std::string,int>(name, new_id));
 
   for (auto graphics_item : *(newInstance->get_graphics_ids())) {
-    GraphicsPipelineGroup *group = get_graphics_instance(graphics_item.item_id, 1000);
+    GraphicsPipelineGroup *group = get_graphics_instance(graphics_item.item_id, -1, false);
     group->used_instances.push_back(newInstance);
   }
 

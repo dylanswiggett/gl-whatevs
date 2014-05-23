@@ -38,7 +38,7 @@ class GameState {
   void step();
   void draw();
  private:
-  GraphicsPipelineGroup *get_graphics_instance(int id, double priority);
+  GraphicsPipelineGroup *get_graphics_instance(int id, double priority, bool check_priority=true);
 
   std::vector<GraphicsPipelineGroup> draw_order_;
   std::map<std::string,int> *model_instance_ids_;
