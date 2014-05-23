@@ -1,4 +1,4 @@
-#include "GameState.hpp"
+#include "GraphicsPipeline.hpp"
 #include "ModelInstance.hpp"
 #include <map>
 #include <string>
@@ -8,7 +8,7 @@
 #include "FramebufferBinder.hpp"
 #include "GraphicsPipelineItem.hpp"
 
-GameState::GameState(GLHandler *gl_handler) {
+GraphicsPipeline::GraphicsPipeline(GLHandler *gl_handler) {
   model_instances_ = new std::map<int,ModelInstance *>();
   model_instance_ids_ = new std::map<std::string,int>();
 
@@ -22,7 +22,7 @@ GameState::GameState(GLHandler *gl_handler) {
   id_incr_ = 1;
 }
 
-GameState::~GameState() {
+GraphicsPipeline::~GraphicsPipeline() {
   std::map<int,ModelInstance *>::iterator it;
   for (it = model_instances_->begin(); it != model_instances_->end(); ++it) {
     delete it->second;
@@ -34,15 +34,15 @@ GameState::~GameState() {
   delete current_camera_;
 }
 
-void GameState::set_camera(Camera *newCamera) {
+void GraphicsPipeline::set_camera(Camera *newCamera) {
   current_camera_ = newCamera;
 }
 
-void GameState::add_graphics_step(std::string name, double priority) {
+void GraphicsPipeline::add_graphics_step(std::string name, double priority) {
   get_graphics_instance(gl_handler_->get_graphics_item_id(name), priority);
 }
 
-GraphicsPipelineGroup *GameState::get_graphics_instance(int id, double priority, bool check_priority) {
+GraphicsPipelineGroup *GraphicsPipeline::get_graphics_instance(int id, double priority, bool check_priority) {
   GraphicsPipelineItem *graphics_item = gl_handler_->get_graphics_item(id);
   int pos = 0;
 
@@ -72,7 +72,7 @@ GraphicsPipelineGroup *GameState::get_graphics_instance(int id, double priority,
   return &(draw_order_[pos]);
 }
 
-int GameState::add_model_instance(std::string name, ModelInstance *newInstance) {
+int GraphicsPipeline::add_model_instance(std::string name, ModelInstance *newInstance) {
   int new_id = id_incr_++;
   model_instances_->insert(std::pair<int,ModelInstance *>(new_id, newInstance));
   model_instance_ids_->insert(std::pair<std::string,int>(name, new_id));
@@ -85,19 +85,19 @@ int GameState::add_model_instance(std::string name, ModelInstance *newInstance) 
   return new_id;
 }
 
-ModelInstance *GameState::get_model_instance(int id) {
+ModelInstance *GraphicsPipeline::get_model_instance(int id) {
   return model_instances_->find(id)->second;
 }
 
-int GameState::get_model_instance_id(std::string name) {
+int GraphicsPipeline::get_model_instance_id(std::string name) {
   return model_instance_ids_->find(name)->second;
 }
 
-void GameState::step() {
+void GraphicsPipeline::step() {
   // TODO: Use me!
 }
 
-void GameState::draw() {
+void GraphicsPipeline::draw() {
   for (auto graphics_group : draw_order_) {
     if (graphics_group.enabled)
       graphics_group.item->act(&(graphics_group.used_instances[0]), 

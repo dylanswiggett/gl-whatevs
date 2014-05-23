@@ -17,12 +17,12 @@ typedef struct {
   std::vector<ModelInstance *> used_instances;
 } GraphicsPipelineGroup;
 
-class GameState {
+class GraphicsPipeline {
  public:
-  GameState(GLHandler *gl_handler);
+  GraphicsPipeline(GLHandler *gl_handler);
 
   // Note: This does NOT free gl_handler_. The client must do this.
-  ~GameState();
+  ~GraphicsPipeline();
 
   void set_camera(Camera *newCamera);
   int add_model_instance(std::string name, ModelInstance *newInstance);

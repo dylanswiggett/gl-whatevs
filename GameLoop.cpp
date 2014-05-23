@@ -5,6 +5,7 @@
 #include "glm/glm.hpp"
 #include "Shader.hpp"
 #include "FramebufferBinder.hpp"
+#include "GraphicsPipeline.hpp"
 
 #define FPS 60
 
@@ -14,7 +15,7 @@ GameLoop::GameLoop(SDL_Window *window) :
   int w, h;
   SDL_GetWindowSize(window, &w, &h);
   gl_handler_ = new GLHandler(w, h);
-  game_state_ = new GameState(gl_handler_);
+  game_state_ = new GraphicsPipeline(gl_handler_);
 }
 
 GameLoop::~GameLoop() {

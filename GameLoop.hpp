@@ -3,7 +3,7 @@
 
 #include "SDL2/SDL.h"
 #include "GLHandler.hpp"
-#include "GameState.hpp"
+#include "GraphicsPipeline.hpp"
 
 class GameLoop {
  public:
@@ -16,7 +16,7 @@ class GameLoop {
   bool game_running_;
   GLHandler *gl_handler_;
   SDL_Window *window_;
-  GameState *game_state_;
+  GraphicsPipeline *game_state_;
 };
 
 #endif  // _GAME_LOOP_HPP_
