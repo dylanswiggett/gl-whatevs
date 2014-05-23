@@ -26,9 +26,9 @@ GameLoop::~GameLoop() {
  * TODO: Make a better setup procedure!
  */
 void GameLoop::hacky_setup() {
-  gl_handler_->add_model("suzanna", new Model("models/suzy.obj"));
+  // gl_handler_->add_model("suzanna", new Model("models/suzy.obj"));
   gl_handler_->add_model("smooth_suzanna", new Model("models/smooth_suzy.obj"));
-  gl_handler_->add_model("cube", new Model("models/cube.obj"));
+  // gl_handler_->add_model("cube", new Model("models/cube.obj"));
   gl_handler_->add_model("scene", new Model("models/hires_scene.obj"));
   gl_handler_->add_model("plane", new Model("models/plane.obj"));
 
@@ -58,11 +58,19 @@ void GameLoop::hacky_setup() {
   gl_handler_->add_graphics_item("default_buffer", screen_buffer);
   game_state_->add_graphics_step("default_buffer", 5);
 
-  Shader *post = new Shader("shaders/default_post.vert", "shaders/default_post.frag", game_state_->get_camera());
+  // Shader *post = new Shader("shaders/default_post.vert", "shaders/default_post.frag", game_state_->get_camera());
+  // post->setTexture0(fb->get_color_texture(), "rendered_tex");
+  // post->setTexture1(fb->get_depth_texture(), "depth_tex");
+  // gl_handler_->add_graphics_item("post_renderer", post);
+  // game_state_->add_graphics_step("post_renderer", 10);
+
+  Shader *post = new Shader("shaders/default_post.vert", "shaders/edge_detect.frag", game_state_->get_camera());
   post->setTexture0(fb->get_color_texture(), "rendered_tex");
   post->setTexture1(fb->get_depth_texture(), "depth_tex");
   gl_handler_->add_graphics_item("post_renderer", post);
   game_state_->add_graphics_step("post_renderer", 10);
+
+  // Add models to the scene.
 
   ModelInstance *instance = new ModelInstance(
     gl_handler_->get_model("smooth_suzanna"),
@@ -84,16 +92,7 @@ void GameLoop::hacky_setup() {
 
   game_state_->add_model_instance("scene", instance);
 
-  // instance = new ModelInstance(
-  //   gl_handler_->get_model("plane"),
-  //   gl_handler_->get_graphics_item_id("squiggly"));
-
-  // instance->setPosition(glm::vec3(0, -3, 0));
-  // instance->setScale(glm::vec3(.5, .5, .5));
-
-  // game_state_->add_model_instance("cube", instance);
-
-  // // Final plane to draw to screen.
+  // Final plane to draw to screen (everything rendered on this.)
 
   instance = new ModelInstance(
     gl_handler_->get_model("plane"),

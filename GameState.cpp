@@ -98,9 +98,7 @@ void GameState::step() {
 }
 
 void GameState::draw() {
-  std::cout << "Draw: " << std::endl;
   for (auto graphics_group : draw_order_) {
-    std::cout << graphics_group.priority << std::endl;
     if (graphics_group.enabled)
       graphics_group.item->act(&(graphics_group.used_instances[0]), 
                                 graphics_group.used_instances.size());
