@@ -2,6 +2,7 @@
 #include "ModelInstance.hpp"
 #include <map>
 #include <string>
+#include <iostream>
 #include "glm/glm.hpp"
 #include "Shader.hpp"
 #include "FramebufferBinder.hpp"
@@ -10,8 +11,7 @@
 GameState::GameState(GLHandler *gl_handler) {
   model_instances_ = new std::map<int,ModelInstance *>();
   model_instance_ids_ = new std::map<std::string,int>();
-  // current_camera_ = new Camera(90, .01, 100,
-  //   ((double) gl_handler->get_width()) / gl_handler->get_height());
+
   current_camera_ = cameraTowards(
     glm::vec3(0, 0, -10), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0),
     90, .01, 100,
@@ -38,17 +38,17 @@ void GameState::set_camera(Camera *newCamera) {
   current_camera_ = newCamera;
 }
 
-void GameState::add_graphics_step(int id) {
-  get_graphics_instance(id);
+void GameState::add_graphics_step(std::string name, double priority) {
+  get_graphics_instance(gl_handler_->get_graphics_item_id(name), priority);
 }
 
-GraphicsPipelineGroup *GameState::get_graphics_instance(int id) {
+GraphicsPipelineGroup *GameState::get_graphics_instance(int id, double priority) {
   GraphicsPipelineItem *graphics_item = gl_handler_->get_graphics_item(id);
   int pos = 0;
 
   if (draw_order_.size() > 0) {
     while (pos < (int) draw_order_.size() &&
-           graphics_item->getPriority() > draw_order_[pos].item->getPriority())
+           priority > draw_order_[pos].priority)
       pos++;
 
     if (pos < (int) draw_order_.size() && draw_order_[pos].item_id == id)
@@ -60,6 +60,7 @@ GraphicsPipelineGroup *GameState::get_graphics_instance(int id) {
   newGroup.item = graphics_item;
   newGroup.item_id = id;
   newGroup.enabled = true;
+  newGroup.priority = priority;
   draw_order_.insert(draw_order_.begin() + pos, newGroup);
 
   return &(draw_order_[pos]);
@@ -71,7 +72,7 @@ int GameState::add_model_instance(std::string name, ModelInstance *newInstance) 
   model_instance_ids_->insert(std::pair<std::string,int>(name, new_id));
 
   for (auto graphics_item : *(newInstance->get_graphics_ids())) {
-    GraphicsPipelineGroup *group = get_graphics_instance(graphics_item.item_id);
+    GraphicsPipelineGroup *group = get_graphics_instance(graphics_item.item_id, 1000);
     group->used_instances.push_back(newInstance);
   }
 
@@ -91,7 +92,9 @@ void GameState::step() {
 }
 
 void GameState::draw() {
+  std::cout << "Draw: " << std::endl;
   for (auto graphics_group : draw_order_) {
+    std::cout << graphics_group.priority << std::endl;
     if (graphics_group.enabled)
       graphics_group.item->act(&(graphics_group.used_instances[0]), 
                                 graphics_group.used_instances.size());

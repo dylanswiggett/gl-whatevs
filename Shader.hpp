@@ -25,7 +25,7 @@ typedef struct {
 
 class Shader : public GraphicsPipelineItem {
  public:
-  Shader(std::string vertexPath, std::string fragPath, double priority, const Camera * const activeCamera);
+  Shader(std::string vertexPath, std::string fragPath, const Camera * const activeCamera);
   virtual ~Shader();
 
   void addInputParami(std::string paramName, int param);
@@ -35,13 +35,10 @@ class Shader : public GraphicsPipelineItem {
   void setTexture1(GLuint texture1, std::string name) { texture1_ = texture1; texture1_name = name; }
 
   virtual void act(ModelInstance **model_instances, int num_instances) override;
-
-  double getPriority() override { return priority_; }
  protected:
   double p_id() { return program_id_; };
   void set_params();
  private:
-  double priority_;
   GLuint texture0_, texture1_;
   std::string texture0_name, texture1_name;
   std::vector<shader_intParam> *int_parameters_;

@@ -10,8 +10,7 @@
 #include <vector>
 #include <iostream>
 
-Shader::Shader(std::string vertexPath, std::string fragPath, double priority, const Camera * const activeCamera) :
-  priority_(priority),
+Shader::Shader(std::string vertexPath, std::string fragPath, const Camera * const activeCamera) :
   texture0_(0), texture1_(0),
   active_camera_(activeCamera)
 {

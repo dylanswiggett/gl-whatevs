@@ -35,19 +35,34 @@ void GameLoop::hacky_setup() {
   int w = gl_handler_->get_width();
   int h = gl_handler_->get_height();
 
-  FramebufferBinder *fb = new FramebufferBinder(w, h, true, true, 0);
-  FramebufferBinder *screen_buffer = new FramebufferBinder(w, h, 5);
+  FramebufferBinder *fb = new FramebufferBinder(w, h, true, true);
+  FramebufferBinder *screen_buffer = new FramebufferBinder(w, h);
 
-  Shader *post = new Shader("shaders/default_post.vert", "shaders/default_post.frag", 10, game_state_->get_camera());
+  // Build the graphics pipeline.
+
+  gl_handler_->add_graphics_item("draw_buffer", fb);
+  game_state_->add_graphics_step("draw_buffer", 0);
+
+  gl_handler_->add_graphics_item("default",
+      new Shader("shaders/default.vert", "shaders/default.frag", game_state_->get_camera()));
+  game_state_->add_graphics_step("default", .5);
+
+  gl_handler_->add_graphics_item("squiggly",
+      new Shader("shaders/squiggly.vert", "shaders/default.frag", game_state_->get_camera()));
+  game_state_->add_graphics_step("squiggly", .5);
+
+  gl_handler_->add_graphics_item("crazy",
+      new Shader("shaders/squiggly.vert", "shaders/color_shader.frag", game_state_->get_camera()));
+  game_state_->add_graphics_step("crazy", .5);
+
+  gl_handler_->add_graphics_item("default_buffer", screen_buffer);
+  game_state_->add_graphics_step("default_buffer", 5);
+
+  Shader *post = new Shader("shaders/default_post.vert", "shaders/default_post.frag", game_state_->get_camera());
   post->setTexture0(fb->get_color_texture(), "rendered_tex");
   post->setTexture1(fb->get_depth_texture(), "depth_tex");
-
-  game_state_->add_graphics_step(gl_handler_->add_graphics_item("draw_buffer", fb));
-  gl_handler_->add_graphics_item("default", new Shader("shaders/default.vert", "shaders/default.frag", .5, game_state_->get_camera()));
-  gl_handler_->add_graphics_item("squiggly", new Shader("shaders/squiggly.vert", "shaders/default.frag", .5, game_state_->get_camera()));
-  gl_handler_->add_graphics_item("crazy", new Shader("shaders/squiggly.vert", "shaders/color_shader.frag", .5, game_state_->get_camera()));
-  game_state_->add_graphics_step(gl_handler_->add_graphics_item("default_buffer", screen_buffer));
   gl_handler_->add_graphics_item("post_renderer", post);
+  game_state_->add_graphics_step("post_renderer", 10);
 
   ModelInstance *instance = new ModelInstance(
     gl_handler_->get_model("smooth_suzanna"),
@@ -107,7 +122,6 @@ int GameLoop::run_game_loop() {
           game_running_ = false;
       }
     }
-
     game_state_->get_model_instance(game_state_->get_model_instance_id("suzanne"))->setRotation(glm::vec3(0, 1, 0), rot);
     game_state_->get_model_instance(game_state_->get_model_instance_id("scene"))->setRotation(glm::vec3(0, 1, 0), rot * .1);
     // game_state_->get_model_instance(game_state_->get_model_instance_id("cube"))->setRotation(glm::vec3(1, 1, 0), -rot);

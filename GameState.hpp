@@ -13,6 +13,7 @@ typedef struct {
   GraphicsPipelineItem *item;
   int item_id;
   bool enabled;
+  double priority;
   std::vector<ModelInstance *> used_instances;
 } GraphicsPipelineGroup;
 
@@ -30,14 +31,14 @@ class GameState {
   ModelInstance *get_model_instance(int id);
   int get_model_instance_id(std::string name);
 
-  void add_graphics_step(int id);
+  void add_graphics_step(std::string name, double priority);
 
   const Camera * const get_camera() const { return current_camera_; }
 
   void step();
   void draw();
  private:
-  GraphicsPipelineGroup *get_graphics_instance(int id);
+  GraphicsPipelineGroup *get_graphics_instance(int id, double priority);
 
   std::vector<GraphicsPipelineGroup> draw_order_;
   std::map<std::string,int> *model_instance_ids_;
