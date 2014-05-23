@@ -25,7 +25,7 @@ void main() {
 		}
 	}
 
-	if (length(maxVals - minVals) > .2)
+	if (length(maxVals - minVals) > .1)
 		color = vec3(0,0,0);
 	else
 		color = vec3(1,1,1);

@@ -84,7 +84,7 @@ void GameLoop::hacky_setup() {
 
   instance = new ModelInstance(
     gl_handler_->get_model("scene"),
-    gl_handler_->get_graphics_item_id("crazy"));
+    gl_handler_->get_graphics_item_id("default"));
 
   instance->setPosition(glm::vec3(0, -6, 2));
   instance->setRotation(glm::vec3(0, 1, 0), 60);
