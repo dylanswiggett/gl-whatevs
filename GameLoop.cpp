@@ -122,7 +122,7 @@ int GameLoop::run_game_loop() {
 
   hacky_setup(); // :(
 
-  float rot = 1;
+  float rot = 5;
 
   while (game_running_) {
     /*

@@ -39,7 +39,7 @@ void main() {
 	color = vec3(0,0,0);
 	// c = c * .1;
 
-	int amt = 4;
+	int amt = 1;
 	int num_samples = 0;
 
 	float diff = c * .01;

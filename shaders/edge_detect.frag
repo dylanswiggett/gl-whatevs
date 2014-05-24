@@ -6,7 +6,6 @@ in vec3 normal;
 in vec2 uv;
 
 uniform sampler2D rendered_tex;
-uniform sampler2D depth_tex;
 
 void main() {
 	vec3 minVals = vec3(1,1,1);
@@ -25,8 +24,9 @@ void main() {
 		}
 	}
 
-	if (length(maxVals - minVals) > .1)
-		color = vec3(0,0,0);
-	else
-		color = vec3(1,1,1);
+	// if (length(maxVals - minVals) > .1)
+	// 	color = vec3(0,0,0);
+	// else
+	// 	color = vec3(1,1,1);
+	color = vec3(1,1,1) - (maxVals - minVals);
 }
