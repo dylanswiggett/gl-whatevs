@@ -1,8 +1,8 @@
-#include "GameLoop.hpp"
 #include <iostream>
+#include "glm/glm.hpp"
+#include "GameLoop.hpp"
 #include "SDL2/SDL.h"
 #include "shader_loader.hpp"
-#include "glm/glm.hpp"
 #include "Shader.hpp"
 #include "FramebufferBinder.hpp"
 #include "GraphicsPipeline.hpp"

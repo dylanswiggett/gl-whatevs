@@ -1,5 +1,6 @@
 CXX = g++
-BULLET = ../bullet-2.82-r2704/src/
+BULLET = ../bullet-2.82-r2704/src
+# Bullet physics linkers are way too large!
 LINKERS = -lSDL2 -lGLEW -lGL  -L$(BULLET)/BulletDynamics -lBulletDynamics \
 		  -L$(BULLET)/BulletCollision -lBulletCollision -L$(BULLET)/LinearMath -lLinearMath
 FLAGS = -Wall -g -std=c++11
@@ -22,10 +23,10 @@ GameObject.o: GameObject.cpp GameObject.hpp GameObjectPositionUpdateSubscriber.h
 	$(CXX) $(FLAGS) -c -o GameObject.o GameObject.cpp
 
 GamePhysicsObject.o: GamePhysicsObject.cpp GamePhysicsObject.hpp GameObject.hpp GamePhysicsState.hpp
-	$(CXX) $(FLAGS) -c -o GamePhysicsObject.o GamePhysicsObject.cpp $(BULLET_INCL)
+	$(CXX) $(FLAGS) -c $(BULLET_INCL) -o GamePhysicsObject.o GamePhysicsObject.cpp
 
 GamePhysicsState.o: GamePhysicsState.cpp GamePhysicsState.hpp
-	$(CXX) $(FLAGS) -c -o GamePhysicsState.o GamePhysicsState.cpp $(BULLET_INCL)
+	$(CXX) $(FLAGS) -c $(BULLET_INCL) -o GamePhysicsState.o GamePhysicsState.cpp
 
 GameLoop.o: GameLoop.cpp GameLoop.hpp GLHandler.hpp shader_loader.hpp GraphicsPipeline.o
 	$(CXX) $(FLAGS) -c -o GameLoop.o GameLoop.cpp
