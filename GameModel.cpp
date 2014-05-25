@@ -6,7 +6,7 @@ GameModel::GameModel() {
 }
 
 GameModel::~GameModel() {
-  delete physics_state_
+  delete physics_state_;
 }
 
 GameModel::step(float seconds) {

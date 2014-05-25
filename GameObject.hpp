@@ -9,6 +9,7 @@
 class GameObject {
  public:
   GameObject();
+  
   void addPositionUpdateSubscriber(GameObjectPositionUpdateSubscriber* newSubscriber);
 
   virtual void setPosition(const glm::vec3& newPosition);

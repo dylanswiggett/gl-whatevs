@@ -3,6 +3,10 @@
 #include "GameObjectPositionUpdateSubscriber.hpp"
 #include "GameObjectID.hpp"
 
+GameObject::GameObject() {
+  /* ... */
+}
+
 void GameObject::addPositionUpdateSubscriber(GameObjectPositionUpdateSubscriber* newSubscriber) {
   position_update_subscribers_.push_back(newSubscriber);
 }

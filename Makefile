@@ -7,10 +7,8 @@ FLAGS = -Wall -g -std=c++11
 BULLET_INCL = -I$(BULLET)
 
 LIBS = main GameLoop GLHandler Model shader_loader ModelInstance Shader Camera \
-       GraphicsPipeline FramebufferBinder  GameObject  \
-       GamePhysicsState
-
-       # GamePhysicsObject GameModel
+       GraphicsPipeline FramebufferBinder GameObject  \
+       GamePhysicsState GamePhysicsObject GameModel
 
 main: $(foreach file, $(LIBS), $(file).o)
 	$(CXX) $(FLAGS) -o main $(foreach file, $(LIBS), $(file).o) $(LINKERS)
@@ -19,16 +17,16 @@ main.o: main.cpp GameLoop.hpp GLHandler.hpp
 	$(CXX) $(FLAGS) -c -o main.o main.cpp
 
 GameModel.o: GameModel.cpp GameModel.hpp GameObject.hpp GamePhysicsState.hpp
-	$(CXX) $(FLAGS) -c -o GameModel.o GameLoop.cpp
+	$(CXX) $(FLAGS) -c -o GameModel.o GameModel.cpp
 
 GameObject.o: GameObject.cpp GameObject.hpp GameObjectPositionUpdateSubscriber.hpp
 	$(CXX) $(FLAGS) -c -o GameObject.o GameObject.cpp
 
 GamePhysicsObject.o: GamePhysicsObject.cpp GamePhysicsObject.hpp GameObject.hpp GamePhysicsState.hpp
-	$(CXX) $(FLAGS) -c $(BULLET_INCL) -o GamePhysicsObject.o GamePhysicsObject.cpp
+	$(CXX) $(FLAGS) -c -o GamePhysicsObject.o GamePhysicsObject.cpp $(BULLET_INCL)
 
 GamePhysicsState.o: GamePhysicsState.cpp GamePhysicsState.hpp
-	$(CXX) $(FLAGS) -c $(BULLET_INCL) -o GamePhysicsState.o GamePhysicsState.cpp
+	$(CXX) $(FLAGS) -c -o GamePhysicsState.o GamePhysicsState.cpp $(BULLET_INCL)
 
 GameLoop.o: GameLoop.cpp GameLoop.hpp GLHandler.hpp shader_loader.hpp GraphicsPipeline.o
 	$(CXX) $(FLAGS) -c -o GameLoop.o GameLoop.cpp
