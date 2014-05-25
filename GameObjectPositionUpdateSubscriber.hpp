@@ -6,8 +6,8 @@
 
 class GameObjectPositionUpdateSubscriber {
  public:
-  virtual gameObjectPositionUpdated(int id, glm::vec3 newPosition) = 0;
-  virtual gameObjectRotationUpdated(int id, glm::vec3 newRotation) = 0;
+  virtual notifyGameObjectPositionUpdated(const GameObjectID& id, glm::vec3 newPosition) = 0;
+  virtual notifyGameObjectRotationUpdated(const GameObjectID& id, glm::vec3 newRotation) = 0;
 };
 
 #endif  // _GAME_OBJECT_POSITION_UPDATE_SUBSCRIBER_

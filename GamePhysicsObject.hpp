@@ -5,7 +5,7 @@
 
 class GamePhysicsObject : public GameObject {
  public:
-  GamePhysicsObject();
+  virtual GamePhysicsObject();
   virtual setModelInstance(ModelInstance* instance);
 
  private:
