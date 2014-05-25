@@ -7,8 +7,10 @@ FLAGS = -Wall -g -std=c++11
 BULLET_INCL = -I$(BULLET)
 
 LIBS = main GameLoop GLHandler Model shader_loader ModelInstance Shader Camera \
-       GraphicsPipeline FramebufferBinder GameModel GameObject GamePhysicsObject \
+       GraphicsPipeline FramebufferBinder  GameObject  \
        GamePhysicsState
+
+       # GamePhysicsObject GameModel
 
 main: $(foreach file, $(LIBS), $(file).o)
 	$(CXX) $(FLAGS) -o main $(foreach file, $(LIBS), $(file).o) $(LINKERS)
