@@ -6,12 +6,17 @@
 
 class GamePhysicsObject : public GameObject {
  public:
-  virtual GamePhysicsObject(GamePhysicsState* physicsState);
+  GamePhysicsObject(GamePhysicsState* physicsState);
+  virtual ~GamePhysicsObject();
 
-  virtual void setFixedPosition(bool isFixed);
+  virtual void setPositionFixed(bool isFixed);
+
+  virtual void setPosition(const glm::vec3& newPosition);
+  virtual void setRotation(const glm::vec3& newRotationAxis, float newRotationAmount);
 
  private:
   GamePhysicsState* state_;
+  bool is_fixed_;
 };
 
 #endif  // _GAME_PHYSICS_OBJECT_HPP_

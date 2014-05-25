@@ -8,4 +8,4 @@ Dependencies
 
 - OpenGL (with 3.3+ support)
 - SDL 2
-- Bullet 2.82+
+- Bullet 2.82+ (Edit the BULLET variable in the makefile to point to local headers before compiling)

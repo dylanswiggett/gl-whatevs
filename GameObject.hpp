@@ -20,9 +20,9 @@ class GameObject {
   GameObject();
   void addPositionUpdateSubscriber(GameObjectPositionUpdateSubscriber* newSubscriber);
 
-  void setPosition(const glm::vec3& newPosition);
+  virtual void setPosition(const glm::vec3& newPosition);
 
-  void setRotation(const glm::vec3& newRotationAxis, float newRotationAmount);
+  virtual void setRotation(const glm::vec3& newRotationAxis, float newRotationAmount);
 
  protected:
   std::vector<GameObjectPositionUpdateSubscriber*> position_update_subscribers_;
