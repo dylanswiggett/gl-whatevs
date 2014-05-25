@@ -2,6 +2,7 @@
 #define _GAME_MODEL_HPP_
 
 #include <map>
+
 #include "GameObject.hpp"
 #include "GamePhysicsState.hpp"
 

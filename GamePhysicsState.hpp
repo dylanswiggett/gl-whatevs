@@ -11,7 +11,7 @@ class GamePhysicsState {
   GamePhysicsState();
   ~GamePhysicsState();
 
-  step(float milliseconds);
+  void step(float milliseconds);
  private:
   btBroadphaseInterface* broadphase_;
   btCollisionDispatcher* dispatcher_;

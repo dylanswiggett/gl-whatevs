@@ -23,7 +23,7 @@ GamePhysicsObject.o: GamePhysicsObject.cpp GamePhysicsObject.hpp GameObject.hpp 
 	$(CXX) $(FLAGS) -c -o GamePhysicsObject.o GamePhysicsObject.cpp $(BULLET)
 
 GamePhysicsState.o: GamePhysicsState.cpp GamePhysicsState.hpp
-	$(CXX) $(FLAGS) -c -o GamePhysicsState.o GamePhysicsState.cpp
+	$(CXX) $(FLAGS) -c -o GamePhysicsState.o GamePhysicsState.cpp $(BULLET)
 
 GameLoop.o: GameLoop.cpp GameLoop.hpp GLHandler.hpp shader_loader.hpp GraphicsPipeline.o
 	$(CXX) $(FLAGS) -c -o GameLoop.o GameLoop.cpp
