@@ -3,10 +3,14 @@
 
 #include "btBulletDynamicsCommon.h"
 
+// Stores all of the overarching physics state in-game.
+// Basically a wrapper for all of the essential bullet physics
+// functionality.
 class GamePhysicsState {
  public:
   GamePhysicsState();
   ~GamePhysicsState();
+
   step(float milliseconds);
  private:
   btBroadphaseInterface* broadphase_;

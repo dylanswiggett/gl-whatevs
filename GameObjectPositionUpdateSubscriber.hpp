@@ -2,12 +2,12 @@
 #define _GAME_OBJECT_POSITION_UPDATE_SUBSCRIBER_
 
 #include "glm/glm.hpp"
-#include "GameObject"
+#include "GameObject.hpp"
 
 class GameObjectPositionUpdateSubscriber {
  public:
-  virtual notifyGameObjectPositionUpdated(const GameObjectID& id, glm::vec3 newPosition) = 0;
-  virtual notifyGameObjectRotationUpdated(const GameObjectID& id, glm::vec3 newRotation) = 0;
+  virtual void notifyGameObjectPositionUpdated(const GameObjectID& id, glm::vec3 newPosition) = 0;
+  virtual void notifyGameObjectRotationUpdated(const GameObjectID& id, glm::vec3 newRotationAxis, float newRotation) = 0;
 };
 
 #endif  // _GAME_OBJECT_POSITION_UPDATE_SUBSCRIBER_
