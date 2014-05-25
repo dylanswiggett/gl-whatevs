@@ -9,6 +9,6 @@ GameModel::~GameModel() {
   delete physics_state_;
 }
 
-GameModel::step(float seconds) {
+void GameModel::step(float seconds) {
   physics_state_->step(seconds * 1000);
 }

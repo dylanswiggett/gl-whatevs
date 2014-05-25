@@ -17,7 +17,7 @@ class GameModel {
 
   // Step the game state forward by the given number
   // of seconds.
-  step(float seconds);
+  void step(float seconds);
  private:
   std::map<GameObjectID,GameObject> game_objects_;
   GamePhysicsState* physics_state_;

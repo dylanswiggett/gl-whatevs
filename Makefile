@@ -17,7 +17,7 @@ main.o: main.cpp GameLoop.hpp GLHandler.hpp
 	$(CXX) $(FLAGS) -c -o main.o main.cpp
 
 GameModel.o: GameModel.cpp GameModel.hpp GameObject.hpp GamePhysicsState.hpp
-	$(CXX) $(FLAGS) -c -o GameModel.o GameModel.cpp
+	$(CXX) $(FLAGS) -c -o GameModel.o GameModel.cpp $(BULLET_INCL)
 
 GameObject.o: GameObject.cpp GameObject.hpp GameObjectPositionUpdateSubscriber.hpp
 	$(CXX) $(FLAGS) -c -o GameObject.o GameObject.cpp
