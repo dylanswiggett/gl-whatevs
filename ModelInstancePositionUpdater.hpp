@@ -2,6 +2,7 @@
 #define _MODEL_INSTANCE_POSITION_UPDATER_HPP_
 
 #include "GameObjectPositionUpdateSubscriber.hpp"
+#include "GameObjectID.hpp"
 
 // Subscribes to a GameObject. When the object has its position
 // or rotation changed, this will apply the corresponding changes

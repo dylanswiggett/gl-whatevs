@@ -1,6 +1,7 @@
 #include "glm/glm.hpp"
 #include "GameObject.hpp"
 #include "GameObjectPositionUpdateSubscriber.hpp"
+#include "GameObjectID.hpp"
 
 void GameObject::addPositionUpdateSubscriber(GameObjectPositionUpdateSubscriber* newSubscriber) {
   position_update_subscribers_.push_back(newSubscriber);

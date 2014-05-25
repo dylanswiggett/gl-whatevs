@@ -2,7 +2,7 @@
 #define _GAME_OBJECT_POSITION_UPDATE_SUBSCRIBER_
 
 #include "glm/glm.hpp"
-#include "GameObject.hpp"
+#include "GameObjectID.hpp"
 
 class GameObjectPositionUpdateSubscriber {
  public:

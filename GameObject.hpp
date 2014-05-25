@@ -3,17 +3,8 @@
 
 #include <vector>
 #include "glm/glm.hpp"
-
-static int id_incr_ = 1;
-
-class GameObjectID {
- public:
-  GameObjectID() : id(id_incr_++) {}
-  bool operator<(const GameObjectID& other) { return id < other.id; }
-  const int id;
-};
-
 #include "GameObjectPositionUpdateSubscriber.hpp"
+#include "GameObjectID.hpp"
 
 class GameObject {
  public:

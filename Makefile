@@ -1,7 +1,9 @@
 CXX = g++
-LINKERS = -lSDL2 -lGLEW -lGL
+BULLET = ../bullet-2.82-r2704/src/
+LINKERS = -lSDL2 -lGLEW -lGL  -L$(BULLET)/BulletDynamics -lBulletDynamics \
+		  -L$(BULLET)/BulletCollision -lBulletCollision -L$(BULLET)/LinearMath -lLinearMath
 FLAGS = -Wall -g -std=c++11
-BULLET = -I../bullet-2.82-r2704/src/
+BULLET_INCL = -I$(BULLET)
 
 LIBS = main GameLoop GLHandler Model shader_loader ModelInstance Shader Camera \
        GraphicsPipeline FramebufferBinder GameModel GameObject GamePhysicsObject \
@@ -20,10 +22,10 @@ GameObject.o: GameObject.cpp GameObject.hpp GameObjectPositionUpdateSubscriber.h
 	$(CXX) $(FLAGS) -c -o GameObject.o GameObject.cpp
 
 GamePhysicsObject.o: GamePhysicsObject.cpp GamePhysicsObject.hpp GameObject.hpp GamePhysicsState.hpp
-	$(CXX) $(FLAGS) -c -o GamePhysicsObject.o GamePhysicsObject.cpp $(BULLET)
+	$(CXX) $(FLAGS) -c -o GamePhysicsObject.o GamePhysicsObject.cpp $(BULLET_INCL)
 
 GamePhysicsState.o: GamePhysicsState.cpp GamePhysicsState.hpp
-	$(CXX) $(FLAGS) -c -o GamePhysicsState.o GamePhysicsState.cpp $(BULLET)
+	$(CXX) $(FLAGS) -c -o GamePhysicsState.o GamePhysicsState.cpp $(BULLET_INCL)
 
 GameLoop.o: GameLoop.cpp GameLoop.hpp GLHandler.hpp shader_loader.hpp GraphicsPipeline.o
 	$(CXX) $(FLAGS) -c -o GameLoop.o GameLoop.cpp
