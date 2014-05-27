@@ -26,8 +26,8 @@ class GameModel {
   GameObject* getGameObject(std::string name);
   GameObject* getGameObject(GameObjectID id);
  private:
-  std::map<std::string,GameObjectID> game_object_ids_;
-  std::map<GameObjectID,GameObject *> game_objects_;
+  std::map<std::string,GameObjectID>* game_object_ids_;
+  std::map<GameObjectID,GameObject *>* game_objects_;
   GamePhysicsState* physics_state_;
 };
 

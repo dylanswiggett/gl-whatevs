@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "glm/glm.hpp"
 #include "GameLoop.hpp"
 #include "SDL2/SDL.h"
@@ -6,6 +7,7 @@
 #include "Shader.hpp"
 #include "FramebufferBinder.hpp"
 #include "GraphicsPipeline.hpp"
+#include "ModelInstancePositionUpdater.hpp"
 #include "GameModel.hpp"
 
 #define FPS 60
@@ -24,6 +26,13 @@ GameLoop::~GameLoop() {
   delete graphics_pipeline_;
   delete game_model_;
   delete gl_handler_;
+}
+
+void GameLoop::add_simple_game_object(std::string name, ModelInstance* instance) {
+  graphics_pipeline_->add_model_instance(name, instance);
+  GameObject* obj = new GameObject();
+  obj->addPositionUpdateSubscriber(new ModelInstancePositionUpdater(instance));
+  game_model_->addGameObject(name, obj);
 }
 
 /*
@@ -87,7 +96,7 @@ void GameLoop::hacky_setup() {
   instance->setRotation(glm::vec3(0, 1, 0), 200);
   instance->setScale(glm::vec3(4, 4, 4));
 
-  graphics_pipeline_->add_model_instance("suzanne", instance);
+  add_simple_game_object("suzanne", instance);
 
   instance = new ModelInstance(
     gl_handler_->get_model("scene"),
@@ -97,7 +106,7 @@ void GameLoop::hacky_setup() {
   instance->setRotation(glm::vec3(0, 1, 0), 60);
   instance->setScale(glm::vec3(2,2,2));
 
-  graphics_pipeline_->add_model_instance("scene", instance);
+  add_simple_game_object("scene", instance);
 
   instance = new ModelInstance(
     gl_handler_->get_model("plane"),
@@ -137,9 +146,9 @@ int GameLoop::run_game_loop() {
           game_running_ = false;
       }
     }
-    graphics_pipeline_->get_model_instance(graphics_pipeline_->get_model_instance_id("suzanne"))->setRotation(glm::vec3(0, 1, 0), rot);
-    graphics_pipeline_->get_model_instance(graphics_pipeline_->get_model_instance_id("scene"))->setRotation(glm::vec3(0, 1, 0), rot * .1);
-    // graphics_pipeline_->get_model_instance(graphics_pipeline_->get_model_instance_id("cube"))->setRotation(glm::vec3(1, 1, 0), -rot);
+
+    game_model_->getGameObject("suzanne")->setRotation(glm::vec3(0, 1, 0), rot);
+    game_model_->getGameObject("scene")->setRotation(glm::vec3(0, 1, 0), rot * .1);
     rot += .01;
 
     graphics_pipeline_->step();
