@@ -16,6 +16,10 @@ class GameObject {
 
   virtual void setRotation(const glm::vec3& newRotationAxis, float newRotationAmount);
 
+  GameObjectID getID() {
+    return id_;
+  }
+
  protected:
   std::vector<GameObjectPositionUpdateSubscriber*> position_update_subscribers_;
   glm::vec3 position_, rotation_axis_;

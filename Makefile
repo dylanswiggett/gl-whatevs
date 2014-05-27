@@ -14,7 +14,7 @@ main: $(foreach file, $(LIBS), $(file).o)
 	$(CXX) $(FLAGS) -o main $(foreach file, $(LIBS), $(file).o) $(LINKERS)
 
 main.o: main.cpp GameLoop.hpp GLHandler.hpp
-	$(CXX) $(FLAGS) -c -o main.o main.cpp
+	$(CXX) $(FLAGS) -c -o main.o main.cpp $(BULLET_INCL)
 
 GameModel.o: GameModel.cpp GameModel.hpp GameObject.hpp GamePhysicsState.hpp
 	$(CXX) $(FLAGS) -c -o GameModel.o GameModel.cpp $(BULLET_INCL)
@@ -29,7 +29,7 @@ GamePhysicsState.o: GamePhysicsState.cpp GamePhysicsState.hpp
 	$(CXX) $(FLAGS) -c -o GamePhysicsState.o GamePhysicsState.cpp $(BULLET_INCL)
 
 GameLoop.o: GameLoop.cpp GameLoop.hpp GLHandler.hpp shader_loader.hpp GraphicsPipeline.o
-	$(CXX) $(FLAGS) -c -o GameLoop.o GameLoop.cpp
+	$(CXX) $(FLAGS) -c -o GameLoop.o GameLoop.cpp $(BULLET_INCL)
 
 GLHandler.o: GLHandler.cpp GLHandler.hpp Model.hpp shader_loader.hpp \
 	         Shader.o

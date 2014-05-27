@@ -6,6 +6,7 @@
 #include "Shader.hpp"
 #include "FramebufferBinder.hpp"
 #include "GraphicsPipeline.hpp"
+#include "GameModel.hpp"
 
 #define FPS 60
 
@@ -15,11 +16,13 @@ GameLoop::GameLoop(SDL_Window *window) :
   int w, h;
   SDL_GetWindowSize(window, &w, &h);
   gl_handler_ = new GLHandler(w, h);
-  game_state_ = new GraphicsPipeline(gl_handler_);
+  graphics_pipeline_ = new GraphicsPipeline(gl_handler_);
+  game_model_= new GameModel();
 }
 
 GameLoop::~GameLoop() {
-  delete game_state_;
+  delete graphics_pipeline_;
+  delete game_model_;
   delete gl_handler_;
 }
 
@@ -43,36 +46,36 @@ void GameLoop::hacky_setup() {
   // Build the graphics pipeline.
 
   gl_handler_->add_graphics_item("draw_buffer", fb);
-  game_state_->add_graphics_step("draw_buffer", 0);
+  graphics_pipeline_->add_graphics_step("draw_buffer", 0);
 
   gl_handler_->add_graphics_item("default",
-      new Shader("shaders/default.vert", "shaders/default.frag", game_state_->get_camera()));
-  game_state_->add_graphics_step("default", .5);
+      new Shader("shaders/default.vert", "shaders/default.frag", graphics_pipeline_->get_camera()));
+  graphics_pipeline_->add_graphics_step("default", .5);
 
   gl_handler_->add_graphics_item("squiggly",
-      new Shader("shaders/squiggly.vert", "shaders/default.frag", game_state_->get_camera()));
-  game_state_->add_graphics_step("squiggly", .5);
+      new Shader("shaders/squiggly.vert", "shaders/default.frag", graphics_pipeline_->get_camera()));
+  graphics_pipeline_->add_graphics_step("squiggly", .5);
 
   gl_handler_->add_graphics_item("crazy",
-      new Shader("shaders/squiggly.vert", "shaders/color_shader.frag", game_state_->get_camera()));
-  game_state_->add_graphics_step("crazy", .5);
+      new Shader("shaders/squiggly.vert", "shaders/color_shader.frag", graphics_pipeline_->get_camera()));
+  graphics_pipeline_->add_graphics_step("crazy", .5);
 
   gl_handler_->add_graphics_item("edge_buffer", fb2);
-  game_state_->add_graphics_step("edge_buffer", 5);
+  graphics_pipeline_->add_graphics_step("edge_buffer", 5);
 
-  Shader *edge = new Shader("shaders/default_post.vert", "shaders/edge_detect.frag", game_state_->get_camera());
+  Shader *edge = new Shader("shaders/default_post.vert", "shaders/edge_detect.frag", graphics_pipeline_->get_camera());
   edge->setTexture0(fb->get_color_texture(), "rendered_tex");
   gl_handler_->add_graphics_item("edge_renderer", edge);
-  game_state_->add_graphics_step("edge_renderer", 10);
+  graphics_pipeline_->add_graphics_step("edge_renderer", 10);
 
   gl_handler_->add_graphics_item("default_buffer", screen_buffer);
-  game_state_->add_graphics_step("default_buffer", 11);
+  graphics_pipeline_->add_graphics_step("default_buffer", 11);
 
-  Shader *post = new Shader("shaders/default_post.vert", "shaders/default_post.frag", game_state_->get_camera());
+  Shader *post = new Shader("shaders/default_post.vert", "shaders/default_post.frag", graphics_pipeline_->get_camera());
   post->setTexture0(fb2->get_color_texture(), "rendered_tex");
   post->setTexture1(fb->get_depth_texture(), "depth_tex");
   gl_handler_->add_graphics_item("post_renderer", post);
-  game_state_->add_graphics_step("post_renderer", 12);
+  graphics_pipeline_->add_graphics_step("post_renderer", 12);
 
   // Add models to the scene.
 
@@ -84,7 +87,7 @@ void GameLoop::hacky_setup() {
   instance->setRotation(glm::vec3(0, 1, 0), 200);
   instance->setScale(glm::vec3(4, 4, 4));
 
-  game_state_->add_model_instance("suzanne", instance);
+  graphics_pipeline_->add_model_instance("suzanne", instance);
 
   instance = new ModelInstance(
     gl_handler_->get_model("scene"),
@@ -94,7 +97,7 @@ void GameLoop::hacky_setup() {
   instance->setRotation(glm::vec3(0, 1, 0), 60);
   instance->setScale(glm::vec3(2,2,2));
 
-  game_state_->add_model_instance("scene", instance);
+  graphics_pipeline_->add_model_instance("scene", instance);
 
   instance = new ModelInstance(
     gl_handler_->get_model("plane"),
@@ -103,7 +106,7 @@ void GameLoop::hacky_setup() {
   instance->setPosition(glm::vec3(0,0,0));
   instance->setScale(glm::vec3(.5,.5,.5));
 
-  game_state_->add_model_instance("edge_render_plane", instance);
+  graphics_pipeline_->add_model_instance("edge_render_plane", instance);
 
   // Final plane to draw to screen (everything rendered on this.)
 
@@ -114,7 +117,7 @@ void GameLoop::hacky_setup() {
   instance->setPosition(glm::vec3(0,0,0));
   instance->setScale(glm::vec3(.5,.5,.5));
 
-  game_state_->add_model_instance("render_plane", instance);
+  graphics_pipeline_->add_model_instance("render_plane", instance);
 }
 
 int GameLoop::run_game_loop() {
@@ -134,16 +137,16 @@ int GameLoop::run_game_loop() {
           game_running_ = false;
       }
     }
-    game_state_->get_model_instance(game_state_->get_model_instance_id("suzanne"))->setRotation(glm::vec3(0, 1, 0), rot);
-    game_state_->get_model_instance(game_state_->get_model_instance_id("scene"))->setRotation(glm::vec3(0, 1, 0), rot * .1);
-    // game_state_->get_model_instance(game_state_->get_model_instance_id("cube"))->setRotation(glm::vec3(1, 1, 0), -rot);
+    graphics_pipeline_->get_model_instance(graphics_pipeline_->get_model_instance_id("suzanne"))->setRotation(glm::vec3(0, 1, 0), rot);
+    graphics_pipeline_->get_model_instance(graphics_pipeline_->get_model_instance_id("scene"))->setRotation(glm::vec3(0, 1, 0), rot * .1);
+    // graphics_pipeline_->get_model_instance(graphics_pipeline_->get_model_instance_id("cube"))->setRotation(glm::vec3(1, 1, 0), -rot);
     rot += .01;
 
-    game_state_->step();
+    graphics_pipeline_->step();
 
     gl_handler_->clear_screen();
 
-    game_state_->draw();
+    graphics_pipeline_->draw();
 
     SDL_GL_SwapWindow(window_);
     // SDL_Delay(1000.0f / FPS);

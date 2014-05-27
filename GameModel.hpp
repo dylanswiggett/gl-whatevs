@@ -2,6 +2,7 @@
 #define _GAME_MODEL_HPP_
 
 #include <map>
+#include <string>
 
 #include "GameObject.hpp"
 #include "GamePhysicsState.hpp"
@@ -18,8 +19,15 @@ class GameModel {
   // Step the game state forward by the given number
   // of seconds.
   void step(float seconds);
+
+  GameObjectID addGameObject(std::string name, GameObject* obj);
+  GameObjectID addGameObject(GameObject* obj);
+
+  GameObject* getGameObject(std::string name);
+  GameObject* getGameObject(GameObjectID id);
  private:
-  std::map<GameObjectID,GameObject> game_objects_;
+  std::map<std::string,GameObjectID> game_object_ids_;
+  std::map<GameObjectID,GameObject *> game_objects_;
   GamePhysicsState* physics_state_;
 };
 
