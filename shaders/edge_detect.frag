@@ -28,5 +28,5 @@ void main() {
 	// 	color = vec3(0,0,0);
 	// else
 	// 	color = vec3(1,1,1);
-	color = vec3(1,1,1) - (maxVals - minVals);
+	color = (vec3(1,1,1) - (maxVals - minVals));
 }

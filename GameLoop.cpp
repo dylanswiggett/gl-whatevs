@@ -147,6 +147,8 @@ int GameLoop::run_game_loop() {
       }
     }
 
+    game_model_->step(.1);
+
     game_model_->getGameObject("suzanne")->setRotation(glm::vec3(0, 1, 0), rot);
     game_model_->getGameObject("scene")->setRotation(glm::vec3(0, 1, 0), rot * .1);
     rot += .01;
