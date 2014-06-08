@@ -1,6 +1,7 @@
 #ifndef _GAME_PHYSICS_OBJECT_HPP_
 #define _GAME_PHYSICS_OBJECT_HPP_
 
+#include "btBulletDynamicsCommon.h"
 #include "GameObject.hpp"
 #include "GamePhysicsState.hpp"
 
@@ -16,6 +17,11 @@ class GamePhysicsObject : public GameObject {
 
  private:
   GamePhysicsState* state_;
+
+  btCollisionShape* shape_;
+  btDefaultMotionState* motion_state_;
+  btRigidBody* body_;
+
   bool is_fixed_;
 };
 

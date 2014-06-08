@@ -3,7 +3,8 @@
 #include "GamePhysicsState.hpp"
 #include "GameObject.hpp"
 
-GamePhysicsObject::GamePhysicsObject(GamePhysicsState* physicsState) : GameObject() {
+GamePhysicsObject::GamePhysicsObject(GamePhysicsState* physicsState,
+    btCollisionShape shape, double mass) : GameObject() {
   state_ = physicsState;
   // TODO: Register the new game physics object with the physics state.
 }
