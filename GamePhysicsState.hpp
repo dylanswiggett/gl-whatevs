@@ -12,6 +12,11 @@ class GamePhysicsState {
   ~GamePhysicsState();
 
   void step(float milliseconds);
+
+  void addRigidBody(btRigidBody* body) {
+    dynamics_world_->addRigidBody(body);
+  }
+  
  private:
   btBroadphaseInterface* broadphase_;
   btCollisionDispatcher* dispatcher_;

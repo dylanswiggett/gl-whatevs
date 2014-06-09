@@ -4,10 +4,12 @@
 #include "btBulletDynamicsCommon.h"
 #include "GameObject.hpp"
 #include "GamePhysicsState.hpp"
+#include "glm/glm.hpp"
 
 class GamePhysicsObject : public GameObject {
  public:
-  GamePhysicsObject(GamePhysicsState* physicsState);
+  GamePhysicsObject(GamePhysicsState* physicsState,
+    btCollisionShape *shape, double mass, glm::vec3 position);
   virtual ~GamePhysicsObject();
 
   virtual void setPositionFixed(bool isFixed);
