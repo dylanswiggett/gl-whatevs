@@ -18,5 +18,5 @@ GamePhysicsState::~GamePhysicsState() {
 }
 
 void GamePhysicsState::step(float milliseconds) {
-  std::cout << "Physics not yet implemented!" << std::endl;
+  dynamics_world_->stepSimulation(milliseconds / 1000000.f);
 }
