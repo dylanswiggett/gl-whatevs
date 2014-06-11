@@ -16,6 +16,7 @@ class GameLoop {
   int run_game_loop();
  private:
   void add_simple_game_object(std::string name, ModelInstance* instance);
+  void add_simple_game_object(std::string name, ModelInstance* instance, GamePhysicsObject* obj);
 
   void hacky_setup();
   bool game_running_;

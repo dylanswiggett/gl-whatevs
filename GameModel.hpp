@@ -6,6 +6,7 @@
 
 #include "GameObject.hpp"
 #include "GamePhysicsState.hpp"
+#include "GamePhysicsObject.hpp"
 
 // Stores the actual state of the game, e.g.
 // any interactive, physics, etc. elements.
@@ -22,6 +23,9 @@ class GameModel {
 
   GameObjectID addGameObject(std::string name, GameObject* obj);
   GameObjectID addGameObject(GameObject* obj);
+
+  GameObjectID addGamePhysicsObject(std::string name, GamePhysicsObject* obj);
+  GameObjectID addGamePhysicsObject(GamePhysicsObject* obj);
 
   GameObject* getGameObject(std::string name);
   GameObject* getGameObject(GameObjectID id);

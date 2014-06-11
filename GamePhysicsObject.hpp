@@ -8,23 +8,18 @@
 
 class GamePhysicsObject : public GameObject, public btMotionState {
  public:
-  GamePhysicsObject(GamePhysicsState* physicsState,
-    btCollisionShape *shape, double mass, glm::vec3 position);
+  GamePhysicsObject(btCollisionShape *shape, double mass);
   virtual ~GamePhysicsObject();
 
   virtual void setPositionFixed(bool isFixed);
 
-  virtual void setPosition(const glm::vec3& newPosition);
-  virtual void setRotation(const glm::vec3& newRotationAxis, float newRotationAmount);
-
   virtual void getWorldTransform(btTransform &worldTrans) const;
   virtual void setWorldTransform(const btTransform &wordTrans);
 
- private:
-  GamePhysicsState* state_;
+  virtual void addToPhysics(GamePhysicsState* physicsState);
 
+ private:
   btCollisionShape* shape_;
-  btDefaultMotionState* motion_state_;
   btRigidBody* body_;
 
   bool is_fixed_;

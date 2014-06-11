@@ -33,6 +33,16 @@ GameObjectID GameModel::addGameObject(GameObject* obj) {
   return obj->getID();
 }
 
+GameObjectID GameModel::addGamePhysicsObject(std::string name, GamePhysicsObject* obj) {
+  obj->addToPhysics(physics_state_);
+  return addGameObject(name, obj);
+}
+
+GameObjectID GameModel::addGamePhysicsObject(GamePhysicsObject* obj) {
+  obj->addToPhysics(physics_state_);
+  return addGameObject(obj);
+}
+
 GameObject* GameModel::getGameObject(string name) {
   return (*game_objects_)[(*game_object_ids_)[name]];
 }

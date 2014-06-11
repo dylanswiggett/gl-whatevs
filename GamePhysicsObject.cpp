@@ -3,14 +3,13 @@
 #include "GamePhysicsState.hpp"
 #include "GameObject.hpp"
 #include "glm/glm.hpp"
+#include <iostream>
 
-GamePhysicsObject::GamePhysicsObject(GamePhysicsState* physicsState,
-    btCollisionShape *shape, double mass_amt, glm::vec3 position) : GameObject() {
-  state_ = physicsState;
-  // TODO: Register the new game physics object with the physics state.
+GamePhysicsObject::GamePhysicsObject(btCollisionShape *shape, double mass_amt) :
+    GameObject(), shape_(shape) {
   btTransform groundTransform;
   groundTransform.setIdentity();
-  groundTransform.setOrigin(btVector3(position.x, position.y, position.z));
+  groundTransform.setOrigin(btVector3());
 
   btScalar mass(mass_amt);
 
@@ -19,12 +18,9 @@ GamePhysicsObject::GamePhysicsObject(GamePhysicsState* physicsState,
   shape_->calculateLocalInertia(mass, localInertia);
 
   // TODO: Extend this so we can update the object position.
-  motion_state_ = new btDefaultMotionState(groundTransform);
-  btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,motion_state_,shape,localInertia);
+  btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,this,shape,localInertia);
 
   body_ = new btRigidBody(rbInfo);
-
-  state_->addRigidBody(body_);
 }
 
 GamePhysicsObject::~GamePhysicsObject() {
@@ -37,12 +33,8 @@ void GamePhysicsObject::setPositionFixed(bool isFixed) {
   /* TODO: DO THE REST! */
 }
 
-void GamePhysicsObject::setPosition(const glm::vec3& newPosition) {
-  GameObject::setPosition(newPosition);
-}
-
-void GamePhysicsObject::setRotation(const glm::vec3& newRotationAxis, float newRotationAmount) {
-  GameObject::setRotation(newRotationAxis, newRotationAmount);
+void GamePhysicsObject::addToPhysics(GamePhysicsState* physicsState) {
+  physicsState->addRigidBody(body_);
 }
 
 // Allow seamless interaction with the physics engine.

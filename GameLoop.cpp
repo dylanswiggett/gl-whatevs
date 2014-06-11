@@ -9,6 +9,7 @@
 #include "GraphicsPipeline.hpp"
 #include "ModelInstancePositionUpdater.hpp"
 #include "GameModel.hpp"
+#include "btBulletDynamicsCommon.h"
 
 #define FPS 60
 
@@ -28,6 +29,12 @@ GameLoop::~GameLoop() {
   delete gl_handler_;
 }
 
+void GameLoop::add_simple_game_object(std::string name, ModelInstance* instance, GamePhysicsObject* obj) {
+  graphics_pipeline_->add_model_instance(name, instance);
+  obj->addPositionUpdateSubscriber(new ModelInstancePositionUpdater(instance));
+  game_model_->addGameObject(name, obj);
+}
+
 void GameLoop::add_simple_game_object(std::string name, ModelInstance* instance) {
   graphics_pipeline_->add_model_instance(name, instance);
   GameObject* obj = new GameObject();
@@ -40,8 +47,8 @@ void GameLoop::add_simple_game_object(std::string name, ModelInstance* instance)
  */
 void GameLoop::hacky_setup() {
   // gl_handler_->add_model("suzanna", new Model("models/suzy.obj"));
-  gl_handler_->add_model("smooth_suzanna", new Model("models/smooth_suzy.obj"));
-  // gl_handler_->add_model("cube", new Model("models/cube.obj"));
+  // gl_handler_->add_model("smooth_suzanna", new Model("models/smooth_suzy.obj"));
+  gl_handler_->add_model("cube", new Model("models/cube.obj"));
   gl_handler_->add_model("scene", new Model("models/hires_scene.obj"));
   gl_handler_->add_model("plane", new Model("models/plane.obj"));
 
@@ -88,22 +95,22 @@ void GameLoop::hacky_setup() {
 
   // Add models to the scene.
 
+  // ModelInstance *instance = new ModelInstance(
+  //   gl_handler_->get_model("smooth_suzanna"),
+  //   gl_handler_->get_graphics_item_id("squiggly"));
+
+  // instance->setPosition(glm::vec3(0, .5, 0));
+  // instance->setRotation(glm::vec3(0, 1, 0), 200);
+  // instance->setScale(glm::vec3(4, 4, 4));
+
+  // add_simple_game_object("suzanne", instance);
+
   ModelInstance *instance = new ModelInstance(
-    gl_handler_->get_model("smooth_suzanna"),
-    gl_handler_->get_graphics_item_id("squiggly"));
-
-  instance->setPosition(glm::vec3(0, .5, 0));
-  instance->setRotation(glm::vec3(0, 1, 0), 200);
-  instance->setScale(glm::vec3(4, 4, 4));
-
-  add_simple_game_object("suzanne", instance);
-
-  instance = new ModelInstance(
     gl_handler_->get_model("scene"),
     gl_handler_->get_graphics_item_id("default"));
 
   instance->setPosition(glm::vec3(0, -6, 2));
-  instance->setRotation(glm::vec3(0, 1, 0), 60);
+  instance->setRotation(glm::vec3(0, 1, 0), 10);
   instance->setScale(glm::vec3(2,2,2));
 
   add_simple_game_object("scene", instance);
@@ -127,6 +134,16 @@ void GameLoop::hacky_setup() {
   instance->setScale(glm::vec3(.5,.5,.5));
 
   graphics_pipeline_->add_model_instance("render_plane", instance);
+
+  instance = new ModelInstance(
+  gl_handler_->get_model("cube"),
+  gl_handler_->get_graphics_item_id("default"));
+
+  GamePhysicsObject *obj = new GamePhysicsObject(
+    new btBoxShape(btVector3(btScalar(50.),btScalar(50.),btScalar(50.))), 1.0);
+
+  add_simple_game_object("box_test", instance, obj);
+
 }
 
 int GameLoop::run_game_loop() {
@@ -134,7 +151,7 @@ int GameLoop::run_game_loop() {
 
   hacky_setup(); // :(
 
-  float rot = 15;
+  // float rot = 15;
 
   while (game_running_) {
     /*
@@ -149,9 +166,9 @@ int GameLoop::run_game_loop() {
 
     game_model_->step(.1);
 
-    game_model_->getGameObject("suzanne")->setRotation(glm::vec3(0, 1, 0), rot);
-    game_model_->getGameObject("scene")->setRotation(glm::vec3(0, 1, 0), rot * .1);
-    rot += .01;
+    // game_model_->getGameObject("suzanne")->setRotation(glm::vec3(0, 1, 0), rot);
+    // game_model_->getGameObject("scene")->setRotation(glm::vec3(0, 1, 0), rot * .1);
+    // rot += .01;
 
     graphics_pipeline_->step();
 

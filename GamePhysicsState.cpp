@@ -10,6 +10,8 @@ GamePhysicsState::GamePhysicsState() {
   solver_ = new btSequentialImpulseConstraintSolver();
   dynamics_world_ = new btDiscreteDynamicsWorld(
     dispatcher_, broadphase_, solver_, collision_configuration_);
+
+  dynamics_world_->setGravity(btVector3(btScalar(0), btScalar(-.5f), btScalar(0)));
 }
 
 GamePhysicsState::~GamePhysicsState() {
@@ -18,5 +20,6 @@ GamePhysicsState::~GamePhysicsState() {
 }
 
 void GamePhysicsState::step(float milliseconds) {
+  std::cout << "test " << (milliseconds / 1000000.f) << std::endl;
   dynamics_world_->stepSimulation(milliseconds / 1000000.f);
 }
