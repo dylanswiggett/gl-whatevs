@@ -5,6 +5,7 @@
 
 GameObject::GameObject() {
   /* ... */
+  setRotation(glm::vec3(0,1,0), 0);
 }
 
 void GameObject::addPositionUpdateSubscriber(GameObjectPositionUpdateSubscriber* newSubscriber) {

@@ -20,6 +20,5 @@ GamePhysicsState::~GamePhysicsState() {
 }
 
 void GamePhysicsState::step(float milliseconds) {
-  std::cout << "test " << (milliseconds / 1000000.f) << std::endl;
-  dynamics_world_->stepSimulation(milliseconds / 1000000.f);
+  dynamics_world_->stepSimulation(milliseconds);
 }

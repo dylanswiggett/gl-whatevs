@@ -32,7 +32,7 @@ GameLoop::~GameLoop() {
 void GameLoop::add_simple_game_object(std::string name, ModelInstance* instance, GamePhysicsObject* obj) {
   graphics_pipeline_->add_model_instance(name, instance);
   obj->addPositionUpdateSubscriber(new ModelInstancePositionUpdater(instance));
-  game_model_->addGameObject(name, obj);
+  game_model_->addGamePhysicsObject(name, obj);
 }
 
 void GameLoop::add_simple_game_object(std::string name, ModelInstance* instance) {

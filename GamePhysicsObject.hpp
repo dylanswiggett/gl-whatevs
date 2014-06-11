@@ -13,8 +13,8 @@ class GamePhysicsObject : public GameObject, public btMotionState {
 
   virtual void setPositionFixed(bool isFixed);
 
-  virtual void getWorldTransform(btTransform &worldTrans) const;
-  virtual void setWorldTransform(const btTransform &wordTrans);
+  virtual void getWorldTransform(btTransform &worldTrans) const override;
+  virtual void setWorldTransform(const btTransform &wordTrans) override;
 
   virtual void addToPhysics(GamePhysicsState* physicsState);
 
