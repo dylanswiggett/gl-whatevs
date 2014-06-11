@@ -135,18 +135,21 @@ void GameLoop::hacky_setup() {
 
   // graphics_pipeline_->add_model_instance("render_plane", instance);
 
+  for (int i = 0; i < 10; i++) {
+
+    ModelInstance *instance = new ModelInstance(
+    gl_handler_->get_model("cube"),
+    gl_handler_->get_graphics_item_id("default"));
+
+    GamePhysicsObject *obj = new GamePhysicsObject(
+      new btBoxShape(btVector3(btScalar(1),btScalar(1),btScalar(1))), 10.0);
+
+    add_simple_game_object("box_test", instance, obj);
+
+    obj->setPosition(glm::vec3(.2 * i, 2 * i, .05 * i));
+  }
+
   ModelInstance *instance = new ModelInstance(
-  gl_handler_->get_model("cube"),
-  gl_handler_->get_graphics_item_id("default"));
-
-  GamePhysicsObject *obj1 = new GamePhysicsObject(
-    new btBoxShape(btVector3(btScalar(1),btScalar(1),btScalar(1))), 1.0);
-
-  add_simple_game_object("box_test", instance, obj1);
-  add_simple_game_object("box_test1", instance, obj1);
-  add_simple_game_object("box_test2", instance, obj1);
-
-  instance = new ModelInstance(
   gl_handler_->get_model("cube"),
   gl_handler_->get_graphics_item_id("default"));
 
@@ -157,7 +160,6 @@ void GameLoop::hacky_setup() {
 
   add_simple_game_object("box_test", instance, obj2);
 
-  obj1->setPosition(glm::vec3(0, 2,0));
   obj2->setPosition(glm::vec3(0,-5,0));
 }
 

@@ -52,7 +52,10 @@ void GamePhysicsObject::addToPhysics(GamePhysicsState* physicsState) {
 
 void GamePhysicsObject::setPosition(const glm::vec3& newPosition) {
   GameObject::setPosition(newPosition);
-  setPositionFixed(true);
+  btTransform transform = body_->getCenterOfMassTransform();
+  transform.setOrigin(
+    btVector3(newPosition.x, newPosition.y, newPosition.z));
+  body_->setCenterOfMassTransform(transform);
 }
 
 void GamePhysicsObject::setRotation(const glm::vec3& newRotationAxis, float newRotationAmt) {
@@ -69,10 +72,7 @@ void GamePhysicsObject::getWorldTransform(btTransform &worldTrans) const {
       rotation_amt_),
     btVector3(position_.x, position_.y, position_.z));
 
-  if (!is_fixed_)
-    const_cast<GamePhysicsObject *>(this)->setPositionFixed(false);
-
-  std::cout << "Getting world position at " << worldTrans.getOrigin().getY() << std::endl;
+  // std::cout << "Getting world position at " << worldTrans.getOrigin().getY() << std::endl;
 }
 
 void GamePhysicsObject::setWorldTransform(const btTransform &worldTrans) {
@@ -83,5 +83,5 @@ void GamePhysicsObject::setWorldTransform(const btTransform &worldTrans) {
 
   GameObject::setPosition(glm::vec3(originTrans.getX(), originTrans.getY(), originTrans.getZ()));
   GameObject::setRotation(glm::vec3(rot_axis.getX(), rot_axis.getY(), rot_axis.getZ()), rot_angle);
-  std::cout << "Setting world position to " << worldTrans.getOrigin().getY() << std::endl;
+  // std::cout << "Setting world position to " << worldTrans.getOrigin().getY() << std::endl;
 }
