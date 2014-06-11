@@ -44,3 +44,23 @@ void GamePhysicsObject::setPosition(const glm::vec3& newPosition) {
 void GamePhysicsObject::setRotation(const glm::vec3& newRotationAxis, float newRotationAmount) {
   GameObject::setRotation(newRotationAxis, newRotationAmount);
 }
+
+// Allow seamless interaction with the physics engine.
+
+void GamePhysicsObject::getWorldTransform(btTransform &worldTrans) const {
+  worldTrans = btTransform(
+    btQuaternion(
+      btVector3(rotation_axis_.x, rotation_axis_.y, rotation_axis_.z),
+      rotation_amt_),
+    btVector3(position_.x, position_.y, position_.z));
+}
+
+void GamePhysicsObject::setWorldTransform(const btTransform &worldTrans) {
+  btVector3 originTrans = worldTrans.getOrigin();
+  btQuaternion rot = worldTrans.getRotation();
+  btVector3 rot_axis = rot.getAxis();
+  btScalar rot_angle = rot.getAngle();
+
+  setPosition(glm::vec3(originTrans.getX(), originTrans.getY(), originTrans.getZ()));
+  setRotation(glm::vec3(rot_axis.getX(), rot_axis.getY(), rot_axis.getZ()), rot_angle);
+}

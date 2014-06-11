@@ -6,7 +6,7 @@
 #include "GamePhysicsState.hpp"
 #include "glm/glm.hpp"
 
-class GamePhysicsObject : public GameObject {
+class GamePhysicsObject : public GameObject, public btMotionState {
  public:
   GamePhysicsObject(GamePhysicsState* physicsState,
     btCollisionShape *shape, double mass, glm::vec3 position);
@@ -16,6 +16,9 @@ class GamePhysicsObject : public GameObject {
 
   virtual void setPosition(const glm::vec3& newPosition);
   virtual void setRotation(const glm::vec3& newRotationAxis, float newRotationAmount);
+
+  virtual void getWorldTransform(btTransform &worldTrans) const;
+  virtual void setWorldTransform(const btTransform &wordTrans);
 
  private:
   GamePhysicsState* state_;
