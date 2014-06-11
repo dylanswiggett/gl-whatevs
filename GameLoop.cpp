@@ -144,9 +144,20 @@ void GameLoop::hacky_setup() {
 
   for (int i = 0; i < 100; i++) {
 
+    std::string sh_name = "shader" + (char)i;
+
+    float num = (i * 37) % 100;
+
+    Shader *sh = new Shader("shaders/default.vert", "shaders/color.frag", graphics_pipeline_->get_camera());
+    sh->addInputParamf("r", num * .01);
+    sh->addInputParamf("g", 1.0 - num * .01);
+    sh->addInputParamf("b", num * .01);
+    gl_handler_->add_graphics_item(sh_name, sh);
+    graphics_pipeline_->add_graphics_step(sh_name, .5);
+
     instance = new ModelInstance(
     gl_handler_->get_model("cube"),
-    gl_handler_->get_graphics_item_id("red"));
+    gl_handler_->get_graphics_item_id(sh_name));
 
     GamePhysicsObject *obj = new GamePhysicsObject(
       new btBoxShape(btVector3(btScalar(1),btScalar(1),btScalar(1))), 10.0);
