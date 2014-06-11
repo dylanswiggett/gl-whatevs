@@ -55,18 +55,25 @@ void GameLoop::hacky_setup() {
   int w = gl_handler_->get_width();
   int h = gl_handler_->get_height();
 
-  // FramebufferBinder *fb = new FramebufferBinder(w, h, true, true);
-  // FramebufferBinder *fb2 = new FramebufferBinder(w, h, true, false);
-  // FramebufferBinder *screen_buffer = new FramebufferBinder(w, h);
+  FramebufferBinder *fb = new FramebufferBinder(w, h, true, true);
+  FramebufferBinder *fb2 = new FramebufferBinder(w, h, true, false);
+  FramebufferBinder *screen_buffer = new FramebufferBinder(w, h);
 
   // Build the graphics pipeline.
 
-  // gl_handler_->add_graphics_item("draw_buffer", fb);
-  // graphics_pipeline_->add_graphics_step("draw_buffer", 0);
+  gl_handler_->add_graphics_item("draw_buffer", fb);
+  graphics_pipeline_->add_graphics_step("draw_buffer", 0);
 
   gl_handler_->add_graphics_item("default",
       new Shader("shaders/default.vert", "shaders/default.frag", graphics_pipeline_->get_camera()));
   graphics_pipeline_->add_graphics_step("default", .5);
+
+  Shader *red_shader = new Shader("shaders/default.vert", "shaders/color.frag", graphics_pipeline_->get_camera());
+  red_shader->addInputParamf("r", 1);
+  red_shader->addInputParamf("g", 0);
+  red_shader->addInputParamf("b", 0);
+  gl_handler_->add_graphics_item("red", red_shader);
+  graphics_pipeline_->add_graphics_step("red", .5);
 
   gl_handler_->add_graphics_item("squiggly",
       new Shader("shaders/squiggly.vert", "shaders/default.frag", graphics_pipeline_->get_camera()));
@@ -76,22 +83,22 @@ void GameLoop::hacky_setup() {
       new Shader("shaders/squiggly.vert", "shaders/color_shader.frag", graphics_pipeline_->get_camera()));
   graphics_pipeline_->add_graphics_step("crazy", .5);
 
-  // gl_handler_->add_graphics_item("edge_buffer", fb2);
-  // graphics_pipeline_->add_graphics_step("edge_buffer", 5);
+  gl_handler_->add_graphics_item("edge_buffer", fb2);
+  graphics_pipeline_->add_graphics_step("edge_buffer", 5);
 
-  // Shader *edge = new Shader("shaders/default_post.vert", "shaders/edge_detect.frag", graphics_pipeline_->get_camera());
-  // edge->setTexture0(fb->get_color_texture(), "rendered_tex");
-  // gl_handler_->add_graphics_item("edge_renderer", edge);
-  // graphics_pipeline_->add_graphics_step("edge_renderer", 10);
+  Shader *edge = new Shader("shaders/default_post.vert", "shaders/edge_detect.frag", graphics_pipeline_->get_camera());
+  edge->setTexture0(fb->get_color_texture(), "rendered_tex");
+  gl_handler_->add_graphics_item("edge_renderer", edge);
+  graphics_pipeline_->add_graphics_step("edge_renderer", 10);
 
-  // gl_handler_->add_graphics_item("default_buffer", screen_buffer);
-  // graphics_pipeline_->add_graphics_step("default_buffer", 11);
+  gl_handler_->add_graphics_item("default_buffer", screen_buffer);
+  graphics_pipeline_->add_graphics_step("default_buffer", 11);
 
-  // Shader *post = new Shader("shaders/default_post.vert", "shaders/default_post.frag", graphics_pipeline_->get_camera());
-  // post->setTexture0(fb2->get_color_texture(), "rendered_tex");
-  // post->setTexture1(fb->get_depth_texture(), "depth_tex");
-  // gl_handler_->add_graphics_item("post_renderer", post);
-  // graphics_pipeline_->add_graphics_step("post_renderer", 12);
+  Shader *post = new Shader("shaders/default_post.vert", "shaders/default_post.frag", graphics_pipeline_->get_camera());
+  post->setTexture0(fb2->get_color_texture(), "rendered_tex");
+  post->setTexture1(fb->get_depth_texture(), "depth_tex");
+  gl_handler_->add_graphics_item("post_renderer", post);
+  graphics_pipeline_->add_graphics_step("post_renderer", 12);
 
   // Add models to the scene.
 
@@ -115,41 +122,41 @@ void GameLoop::hacky_setup() {
 
   // add_simple_game_object("scene", instance);
 
-  // instance = new ModelInstance(
-  //   gl_handler_->get_model("plane"),
-  //   gl_handler_->get_graphics_item_id("edge_renderer"));
+  ModelInstance *instance = new ModelInstance(
+    gl_handler_->get_model("plane"),
+    gl_handler_->get_graphics_item_id("edge_renderer"));
 
-  // instance->setPosition(glm::vec3(0,0,0));
-  // instance->setScale(glm::vec3(.5,.5,.5));
+  instance->setPosition(glm::vec3(0,0,0));
+  instance->setScale(glm::vec3(.5,.5,.5));
 
-  // graphics_pipeline_->add_model_instance("edge_render_plane", instance);
+  graphics_pipeline_->add_model_instance("edge_render_plane", instance);
 
   // Final plane to draw to screen (everything rendered on this.)
 
-  // instance = new ModelInstance(
-  //   gl_handler_->get_model("plane"),
-  //   gl_handler_->get_graphics_item_id("post_renderer"));
+  instance = new ModelInstance(
+    gl_handler_->get_model("plane"),
+    gl_handler_->get_graphics_item_id("post_renderer"));
 
-  // instance->setPosition(glm::vec3(0,0,0));
-  // instance->setScale(glm::vec3(.5,.5,.5));
+  instance->setPosition(glm::vec3(0,0,0));
+  instance->setScale(glm::vec3(.5,.5,.5));
 
-  // graphics_pipeline_->add_model_instance("render_plane", instance);
+  graphics_pipeline_->add_model_instance("render_plane", instance);
 
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 100; i++) {
 
-    ModelInstance *instance = new ModelInstance(
+    instance = new ModelInstance(
     gl_handler_->get_model("cube"),
-    gl_handler_->get_graphics_item_id("default"));
+    gl_handler_->get_graphics_item_id("red"));
 
     GamePhysicsObject *obj = new GamePhysicsObject(
       new btBoxShape(btVector3(btScalar(1),btScalar(1),btScalar(1))), 10.0);
 
     add_simple_game_object("box_test", instance, obj);
 
-    obj->setPosition(glm::vec3(.2 * i, 2 * i, .05 * i));
+    obj->setPosition(glm::vec3(-.1 * i, 2 * i, -.05 * i));
   }
 
-  ModelInstance *instance = new ModelInstance(
+  instance = new ModelInstance(
   gl_handler_->get_model("cube"),
   gl_handler_->get_graphics_item_id("default"));
 
