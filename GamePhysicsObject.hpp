@@ -16,6 +16,9 @@ class GamePhysicsObject : public GameObject, public btMotionState {
   virtual void getWorldTransform(btTransform &worldTrans) const override;
   virtual void setWorldTransform(const btTransform &wordTrans) override;
 
+  virtual void setPosition(const glm::vec3& newPosition);
+  virtual void setRotation(const glm::vec3& newRotationAxis, float newRotationAmount);
+
   virtual void addToPhysics(GamePhysicsState* physicsState);
 
  private:

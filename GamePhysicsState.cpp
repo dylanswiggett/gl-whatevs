@@ -11,7 +11,7 @@ GamePhysicsState::GamePhysicsState() {
   dynamics_world_ = new btDiscreteDynamicsWorld(
     dispatcher_, broadphase_, solver_, collision_configuration_);
 
-  dynamics_world_->setGravity(btVector3(btScalar(0), btScalar(-.5f), btScalar(0)));
+  dynamics_world_->setGravity(btVector3(btScalar(0), btScalar(-1.0f), btScalar(0)));
 }
 
 GamePhysicsState::~GamePhysicsState() {

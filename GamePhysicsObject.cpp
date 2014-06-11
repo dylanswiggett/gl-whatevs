@@ -15,12 +15,19 @@ GamePhysicsObject::GamePhysicsObject(btCollisionShape *shape, double mass_amt) :
 
   btVector3 localInertia(0,0,0);
 
-  shape_->calculateLocalInertia(mass, localInertia);
+  if (mass_amt != 0.0f) {
+    shape_->calculateLocalInertia(mass, localInertia);
+  }
 
   // TODO: Extend this so we can update the object position.
   btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,this,shape,localInertia);
 
   body_ = new btRigidBody(rbInfo);
+
+  if (mass_amt == 0.0f)
+    setPositionFixed(true);
+  else
+    setPositionFixed(false);
 }
 
 GamePhysicsObject::~GamePhysicsObject() {
@@ -29,13 +36,28 @@ GamePhysicsObject::~GamePhysicsObject() {
 
 void GamePhysicsObject::setPositionFixed(bool isFixed) {
   is_fixed_ = isFixed;
-
-  /* TODO: DO THE REST! */
+  if (isFixed) {
+    body_->setCollisionFlags(body_->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+    body_->setActivationState(DISABLE_DEACTIVATION);
+  } else {
+    body_->setCollisionFlags( body_->getCollisionFlags() & ~(btCollisionObject::CF_KINEMATIC_OBJECT));
+    body_->activate(true); // or try… body->forceActivationState(ACTIVE_FLAG)
+  }
 }
 
 void GamePhysicsObject::addToPhysics(GamePhysicsState* physicsState) {
   std::cout << "Adding object to physics simulation." << std::endl;
   physicsState->addRigidBody(body_);
+}
+
+void GamePhysicsObject::setPosition(const glm::vec3& newPosition) {
+  GameObject::setPosition(newPosition);
+  setPositionFixed(true);
+}
+
+void GamePhysicsObject::setRotation(const glm::vec3& newRotationAxis, float newRotationAmt) {
+  GameObject::setRotation(newRotationAxis, newRotationAmt);
+  setPositionFixed(true);
 }
 
 // Allow seamless interaction with the physics engine.
@@ -46,6 +68,10 @@ void GamePhysicsObject::getWorldTransform(btTransform &worldTrans) const {
       btVector3(rotation_axis_.x, rotation_axis_.y, rotation_axis_.z),
       rotation_amt_),
     btVector3(position_.x, position_.y, position_.z));
+
+  if (!is_fixed_)
+    const_cast<GamePhysicsObject *>(this)->setPositionFixed(false);
+
   std::cout << "Getting world position at " << worldTrans.getOrigin().getY() << std::endl;
 }
 
@@ -55,7 +81,7 @@ void GamePhysicsObject::setWorldTransform(const btTransform &worldTrans) {
   btVector3 rot_axis = rot.getAxis();
   btScalar rot_angle = rot.getAngle();
 
-  setPosition(glm::vec3(originTrans.getX(), originTrans.getY(), originTrans.getZ()));
-  setRotation(glm::vec3(rot_axis.getX(), rot_axis.getY(), rot_axis.getZ()), rot_angle);
+  GameObject::setPosition(glm::vec3(originTrans.getX(), originTrans.getY(), originTrans.getZ()));
+  GameObject::setRotation(glm::vec3(rot_axis.getX(), rot_axis.getY(), rot_axis.getZ()), rot_angle);
   std::cout << "Setting world position to " << worldTrans.getOrigin().getY() << std::endl;
 }
