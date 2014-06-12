@@ -10,8 +10,6 @@
 
 // Stores the actual state of the game, e.g.
 // any interactive, physics, etc. elements.
-// Anything related to graphical representation
-// should not be involved here.
 class GameModel {
  public:
   GameModel();
@@ -21,13 +19,20 @@ class GameModel {
   // of seconds.
   void step(float seconds);
 
+  // Adds something to the game, that can be accessed either by the
+  // name given or by the returned ID.
   GameObjectID addGameObject(std::string name, GameObject* obj);
+  // Adds something to the game that can be accessed by the returned ID.
   GameObjectID addGameObject(GameObject* obj);
 
   GameObjectID addGamePhysicsObject(std::string name, GamePhysicsObject* obj);
   GameObjectID addGamePhysicsObject(GamePhysicsObject* obj);
 
+  // Returns the GameObject with the given name, or nullptr
+  // if no such object exists.
   GameObject* getGameObject(std::string name);
+  // Returns the GameObject wih the given id, or nullptr
+  // if no such object exists.
   GameObject* getGameObject(GameObjectID id);
  private:
   std::map<std::string,GameObjectID>* game_object_ids_;

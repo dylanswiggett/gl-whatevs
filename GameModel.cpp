@@ -44,7 +44,10 @@ GameObjectID GameModel::addGamePhysicsObject(GamePhysicsObject* obj) {
 }
 
 GameObject* GameModel::getGameObject(string name) {
-  return (*game_objects_)[(*game_object_ids_)[name]];
+  map<string,GameObjectID>::iterator it = game_object_ids_->find(name);
+  if (it == game_object_ids_->end())
+    return nullptr;
+  return (*game_objects_)[it->second];
 }
 
 GameObject* GameModel::getGameObject(GameObjectID id) {

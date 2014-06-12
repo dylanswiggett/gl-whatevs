@@ -159,26 +159,50 @@ void GameLoop::hacky_setup() {
     gl_handler_->get_model("cube"),
     gl_handler_->get_graphics_item_id(sh_name));
 
+    instance->setScale(glm::vec3(1, 1, 1 + num * .01));
+
     GamePhysicsObject *obj = new GamePhysicsObject(
-      new btBoxShape(btVector3(btScalar(1),btScalar(1),btScalar(1))), 10.0);
+      new btBoxShape(btVector3(btScalar(1),btScalar(1),btScalar(1 + num * .01))), 10.0);
 
     add_simple_game_object("box_test", instance, obj);
 
-    obj->setPosition(glm::vec3(-.1 * i, 2 * i, -.05 * i));
+    int offset = (i % 10);
+
+    obj->setPosition(glm::vec3(-.3 * offset, 2.1 * i, -.05 * offset));
   }
 
   instance = new ModelInstance(
   gl_handler_->get_model("cube"),
   gl_handler_->get_graphics_item_id("default"));
 
-  instance->setScale(glm::vec3(10,.1,10));
+  instance->setScale(glm::vec3(20,1,20));
 
   GamePhysicsObject *obj2 = new GamePhysicsObject(
-    new btBoxShape(btVector3(btScalar(10),btScalar(1),btScalar(10))), 0);
+    new btBoxShape(btVector3(btScalar(20),btScalar(1),btScalar(20))), 0);
 
   add_simple_game_object("box_test", instance, obj2);
 
   obj2->setPosition(glm::vec3(0,-5,0));
+
+  Shader *sh = new Shader("shaders/default.vert", "shaders/color.frag", graphics_pipeline_->get_camera());
+  sh->addInputParamf("r", 0);
+  sh->addInputParamf("g", 0);
+  sh->addInputParamf("b", 0);
+  gl_handler_->add_graphics_item("box_test_sh", sh);
+  graphics_pipeline_->add_graphics_step("box_test_sh", .5);
+
+  instance = new ModelInstance(
+  gl_handler_->get_model("cube"),
+  gl_handler_->get_graphics_item_id("box_test_sh"));
+
+  instance->setScale(glm::vec3(3,1,3));
+
+  obj2 = new GamePhysicsObject(
+    new btBoxShape(btVector3(btScalar(3),btScalar(1),btScalar(3))), 0);
+
+  add_simple_game_object("box_test_1", instance, obj2);
+
+  obj2->setPosition(glm::vec3(0,-3,0));
 }
 
 int GameLoop::run_game_loop() {

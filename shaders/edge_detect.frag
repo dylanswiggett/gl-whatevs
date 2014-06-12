@@ -29,4 +29,7 @@ void main() {
 	// else
 	// 	color = vec3(1,1,1);
 	color = (vec3(1,1,1) - (maxVals - minVals));
+
+	float color_comp = min(min(color.r, color.g), color.b);
+	color = vec3(color_comp, color_comp, color_comp);
 }
