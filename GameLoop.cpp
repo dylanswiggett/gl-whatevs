@@ -47,7 +47,7 @@ void GameLoop::add_simple_game_object(std::string name, ModelInstance* instance)
  */
 void GameLoop::hacky_setup() {
   // gl_handler_->add_model("suzanna", new Model("models/suzy.obj"));
-  // gl_handler_->add_model("smooth_suzanna", new Model("models/smooth_suzy.obj"));
+  gl_handler_->add_model("smooth_suzanna", new Model("models/smooth_suzy.obj"));
   gl_handler_->add_model("cube", new Model("models/cube.obj"));
   gl_handler_->add_model("scene", new Model("models/hires_scene.obj"));
   gl_handler_->add_model("plane", new Model("models/plane.obj"));
@@ -102,15 +102,15 @@ void GameLoop::hacky_setup() {
 
   // Add models to the scene.
 
-  // ModelInstance *instance = new ModelInstance(
-  //   gl_handler_->get_model("smooth_suzanna"),
-  //   gl_handler_->get_graphics_item_id("squiggly"));
+  ModelInstance *instance = new ModelInstance(
+    gl_handler_->get_model("smooth_suzanna"),
+    gl_handler_->get_graphics_item_id("squiggly"));
 
-  // instance->setPosition(glm::vec3(0, .5, 0));
-  // instance->setRotation(glm::vec3(0, 1, 0), 200);
-  // instance->setScale(glm::vec3(4, 4, 4));
+  instance->setPosition(glm::vec3(0, .5, 0));
+  instance->setRotation(glm::vec3(0, 1, 0), 200);
+  instance->setScale(glm::vec3(4, 4, 4));
 
-  // add_simple_game_object("suzanne", instance);
+  add_simple_game_object("suzanne", instance);
 
   // ModelInstance *instance = new ModelInstance(
   //   gl_handler_->get_model("scene"),
@@ -122,7 +122,7 @@ void GameLoop::hacky_setup() {
 
   // add_simple_game_object("scene", instance);
 
-  ModelInstance *instance = new ModelInstance(
+  instance = new ModelInstance(
     gl_handler_->get_model("plane"),
     gl_handler_->get_graphics_item_id("edge_renderer"));
 
@@ -210,7 +210,7 @@ int GameLoop::run_game_loop() {
 
   hacky_setup(); // :(
 
-  // float rot = 15;
+  float rot = 15;
 
   while (game_running_) {
     /*
@@ -225,9 +225,9 @@ int GameLoop::run_game_loop() {
 
     game_model_->step(.1);
 
-    // game_model_->getGameObject("suzanne")->setRotation(glm::vec3(0, 1, 0), rot);
+    game_model_->getGameObject("suzanne")->setRotation(glm::vec3(0, 1, 0), rot);
     // game_model_->getGameObject("scene")->setRotation(glm::vec3(0, 1, 0), rot * .1);
-    // rot += .01;
+    rot += .01;
 
     graphics_pipeline_->step();
 
