@@ -55,6 +55,7 @@ void GameLoop::hacky_setup() {
   int w = gl_handler_->get_width();
   int h = gl_handler_->get_height();
 
+  FramebufferBinder *shadow_buffer = new FramebufferBinder(1024, 1024, false, true);
   FramebufferBinder *fb = new FramebufferBinder(w, h, true, true);
   FramebufferBinder *fb2 = new FramebufferBinder(w, h, true, false);
   FramebufferBinder *screen_buffer = new FramebufferBinder(w, h);

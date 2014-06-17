@@ -7,6 +7,7 @@
 using namespace glm;
 
 Camera::Camera(double FOV, double nearPlane, double farPlane, double aspectRatio) : 
+  perspective_(true),
   pos_(vec3(0, 0, 0)),
   dir_(vec3(0, 0, 1)),
   up_(vec3(0, 1, 0)),
@@ -20,7 +21,8 @@ Camera::Camera(double FOV, double nearPlane, double farPlane, double aspectRatio
 
 Camera::Camera(vec3 pos, vec3 dir, vec3 up,
                double FOV, double nearPlane, double farPlane,
-               double aspectRatio) :
+               double aspectRatio, bool perspective) :
+  perspective_(perspective),
   pos_(pos), dir_(dir), up_(up),
   FOV_(FOV),
   near_(nearPlane),
@@ -32,7 +34,10 @@ Camera::Camera(vec3 pos, vec3 dir, vec3 up,
 
 void Camera::build_mat() {
   camera_mat_ = lookAt(pos_, dir_ + pos_, up_);
-  projection_mat_ = perspective(FOV_, ratio_, near_, far_);
+  if (perspective_)
+    projection_mat_ = perspective(FOV_, ratio_, near_, far_);
+  else
+    projection_mat_ = ortho<float>(-10,10,-10,10,-10,20);
 }
 
 const mat4 Camera::getCamMatrix() const {
@@ -44,6 +49,6 @@ const mat4 Camera::getProjMatrix() const {
 }
 
 Camera *cameraTowards(vec3 pos, vec3 towards, vec3 up, double FOV,
-                      double nearPlane, double farPlane, double aspectRatio) {
-  return new Camera(pos, towards - pos, up, FOV, nearPlane, farPlane, aspectRatio);
+                      double nearPlane, double farPlane, double aspectRatio, bool perspective) {
+  return new Camera(pos, towards - pos, up, FOV, nearPlane, farPlane, aspectRatio, perspective);
 }

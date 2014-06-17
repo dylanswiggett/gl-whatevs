@@ -13,7 +13,7 @@ class Camera {
   // Construct a camera with the given view parameters, and the given
   // three direction vectors. These vectors must be orthonormal.
   Camera(glm::vec3 pos, glm::vec3 dir, glm::vec3 up, double FOV,
-         double nearPlane, double farPlane, double aspectRatio);
+         double nearPlane, double farPlane, double aspectRatio, bool persective_);
 
   // Get the view matrix for use in OpenGL.
   const glm::mat4 getCamMatrix() const;
@@ -22,6 +22,7 @@ class Camera {
  private:
   void build_mat();
 
+  bool perspective_;
   glm::vec3 pos_, dir_, up_;
   glm::mat4 camera_mat_, projection_mat_;
   double FOV_, near_, far_, ratio_;
@@ -32,4 +33,4 @@ class Camera {
 // Create a new camera looking from the given position towards
 // the given point.
 Camera *cameraTowards(glm::vec3 pos, glm::vec3 towards, glm::vec3 up,
-  double FOV, double nearPlane, double farPlane, double aspectRatio);
+  double FOV, double nearPlane, double farPlane, double aspectRatio, bool perspective);

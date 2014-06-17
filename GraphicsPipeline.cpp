@@ -16,7 +16,8 @@ GraphicsPipeline::GraphicsPipeline(GLHandler *gl_handler) {
   current_camera_ = cameraTowards(
     glm::vec3(0, 0, -10), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0),
     90, .01, 100,
-    ((double) gl_handler->get_width()) / ((double) gl_handler->get_height()));
+    ((double) gl_handler->get_width()) / ((double) gl_handler->get_height()),
+    true);
 
   gl_handler_ = gl_handler;
 
